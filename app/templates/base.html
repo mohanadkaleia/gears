@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link href="{{ url_for('static',filename='css/main.css') }}" rel="stylesheet" />    
+    <link href="https://fonts.googleapis.com/css2?family=Crafty+Girls&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital@1&family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" integrity="sha512-Velp0ebMKjcd9RiCoaHhLXkR1sFoCCWXNp6w4zj1hfMifYB5441C+sKeBl/T/Ka6NjBiRfBBQRaQq65ekYz3UQ==" crossorigin="anonymous" />
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g==" crossorigin="anonymous"></script>
+  </head>
+
+  <body class="bg-light">    
+    <!-- Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light nav-underline shadow-sm p-3 mb-5 bg-white">    
+        <a class="navbar-brand" href="{{ config.SITEURL }}" style="color:#364967">
+            <img src="/theme/images/logo.png" height="30" class="d-inline-block align-top" alt="">
+            🚗 DKLube
+        </a>  
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">                   
+          <li class="nav-item">
+            <a class="nav-link" href="{{ config.SITEURL }}">Home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ config.SITEURL }}/inventory">Inventory</a>
+          </li>
+                    
+          <li class="nav-item">
+            <a class="nav-link" href="{{ config.SITEURL }}/contact">Contact Us</a>
+          </li>
+        </ul>
+
+        <span class="badge badge-pill badge-warning" style="margin-right: 20px;">Under construction 🚧 (alpha)</span>
+
+        <div class="nav navbar-nav navbar-right nav-social">            
+            <a title="Medium" target="_blank" href="https://medium.com/@ms.kaleia"><i style="color:dimgray" class="fab fa-medium"></i></a>
+            <a title="Github" target="_blank" href="https://github.com/mohanadkaleia"><i style="color:dimgray" class="fab fa-github-alt"></i></a>
+            <a title="Twitter" target="_blank" href="https://twitter.com/m_kaleia"><i style="color:#00acee" class="fab fa-twitter"></i></a>
+            <a title="LinkedIn" target="_blank" href="https://www.linkedin.com/in/mohanad-kaleia-077a8368/"><i style="color:#0e76a8" class="fab fa-linkedin-in"></i></a>
+        </div>
+
+      </div>
+    </nav>
+
+    <!-- Content of the page -->
+    <div class="container container-fluid main-content">
+        <div class="header text-center">
+            <h1 style="font-family: 'Ubuntu', sans-serif;">DKLube & Details</h1>
+            <p class="lead" style="font-family: 'Crafty Girls'">
+            <mark>give your car a treat 🍬</mark>
+            </br>   
+            </br> 
+            Diea Kaleia is the business owner and operator. 
+            We do state inspection / oil change / light mechanic work. 
+            As well as tire installation coming soon!
+            </p>
+        </div>
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <!-- Filler-->
+    <div style="height: 300px;">
+
+    </div>
+
+    <footer>
+        <div class="container container-fluid">
+            <!-- Footer Links -->
+            <div class="row" style="padding: 25px;">
+                <div class="col-md-4 col-sm-12">
+                    <h1>Address</h1>
+                    <p>1400 Longhorn Trial, <br/> Fort Worth, Texas</p>                                  
+                </div>
+                
+                <div class="col-md-4 col-sm-12 col-12">
+                    <h1>Open hours</h1>
+                    <ul>
+                        <li>Monday: 9 AM - 6 PM</li>
+                        <li>Tuesday: 9 AM - 6 PM</li>
+                        <li>Wednsday: 9 AM - 6 PM</li>
+                        <li>Thursday: 9 AM - 6 PM</li>
+                        <li>Friday: 9 AM - 6 PM</li>
+                        <li>Saturday: 9 AM - 6 PM</li>
+                        <li>Sunday: closed yaay! 🌴</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-sm-12 col-12">
+                    <h1>Stay in touch</h1>
+                    dklube63@gmail.com
+                    <br/>
+                    (817) 297 1983
+                    <div class="social-links">            
+                        <a title="Medium" target="_blank" href="https://medium.com/@ms.kaleia"><i class="fab fa-medium"></i></a>
+                        <a title="Github" target="_blank" href="https://github.com/mohanadkaleia"><i class="fab fa-github-alt"></i></a>
+                        <a title="Twitter" target="_blank" href="https://twitter.com/m_kaleia"><i class="fab fa-twitter"></i></a>
+                        <a title="LinkedIn" target="_blank" href="https://www.linkedin.com/in/mohanad-kaleia-077a8368/"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright text-center">
+            Built with ❤️ - Copyright 2020: <a href="#">DKLube.com</a>
+        </div>
+    </footer>      
+  </body>
+</html>
