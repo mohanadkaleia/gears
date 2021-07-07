@@ -21,7 +21,7 @@ def insert(shop_id="", name="", description="", images=None):
         images = []
     
     # Initialize id with randomly generated string
-    service_id = util.random_id()
+    service_id = util.random_id(initial='s')
 
     services.insert({
         'service_id': service_id,

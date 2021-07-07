@@ -19,7 +19,7 @@ vehicles = db.table('vehicles')
 # CRUD functions 
 def insert(make="", model="", year="", price="", title="", condition="", description="", images=None):
     # Initialize id with randomly generated string
-    vehicle_id = util.random_id()
+    vehicle_id = util.random_id(initial='v')
 
     if not images:
         images = []
