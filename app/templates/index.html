@@ -2,31 +2,31 @@
 {% block content %}
 
 <div class="row">
-    {% for service in services %}        
+    {% for service in services %}
     <div class="col-md-4 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">       
+      <div class="card mb-4 shadow bg-white rounded">
         <img src="{{ service.cover }}" class="card-img-top" alt="{{ service.title }}" height="225" width="100%">
-        
+
         <div class="card-body">
           <h1><a href="/{{ service.slug }}.html">{{service.title}}</a></h1>
-          <p class="card-text">            
+          <p class="card-text">
             {{ service.summary|striptags }}
           </p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
               <a href="/{{ service.slug }}.html" class="btn btn-sm btn-outline-primary">
                 Details
-              </a>             
+              </a>
             </div>
             <small class="text-muted">tbd</small>
           </div>
         </div>
 
       </div>
-    </div>    
+    </div>
     {% else %}
     No posts yet!
-    {% endfor %}    
+    {% endfor %}
   </div>
 
 
@@ -36,31 +36,31 @@
 </div>
 
 <div class="row">
-    {% for vehicle in vehicles[:6] %}        
+    {% for vehicle in vehicles[:6] %}
     <div class="col-md-4 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">       
+      <div class="card mb-4 shadow bg-white rounded">
         <img src="{{ vehicle.cover }}" class="card-img-top" alt="{{ vehicle.slug }}" height="225" width="100%">
-        
+
         <div class="card-body">
           <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.slug}}</a></h1>
-          <p class="card-text">            
+          <p class="card-text">
             {{ vehicle.summary|striptags }}
           </p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
               <a href="/inventory/{{ vehicle.id }}" class="btn btn-sm btn-outline-primary">
                 Details
-              </a>             
+              </a>
             </div>
             <small class="text-muted">tbd</small>
           </div>
         </div>
       </div>
-    </div>  
-       
+    </div>
+
     {% else %}
     No posts yet!
-    {% endfor %}    
+    {% endfor %}
 </div>
 
 <div class="row justify-content-md-center">
@@ -68,7 +68,7 @@
         <div class="btn-group">
             <a href="{{ config.SITEURL }}/inventory" class="btn btn-sm btn-outline-primary">
             Check out our Inventory
-            </a>             
+            </a>
         </div>
     </div>
 </div>

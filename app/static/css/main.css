@@ -10,9 +10,9 @@ body {
 footer {
     position: absolute;
     bottom: 0;
-    width: 100%;        
-    background-color: #5e5e5e;    
-    color: white;    
+    width: 100%;
+    background-color: #5e5e5e;
+    color: white;
 }
 
 .bd-placeholder-img {
@@ -23,13 +23,13 @@ footer {
     -ms-user-select: none;
     user-select: none;
 }
-  
+
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {
       font-size: 3.5rem;
     }
 }
-  
+
 .jumbotron {
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -42,15 +42,15 @@ footer {
       padding-bottom: 6rem;
     }
 }
-  
+
 .jumbotron p:last-child {
     margin-bottom: 0;
 }
-  
+
 .jumbotron h1 {
     font-weight: 300;
 }
-  
+
 .jumbotron .container {
     max-width: 40rem;
 }
@@ -59,16 +59,16 @@ footer {
     margin-top: 100px;
     margin-bottom: 75px;
 }
-  
+
 .nav-social a {
-    margin-right: 10px;    
+    margin-right: 10px;
 }
 
 .article {
     background-color: #fff;
     margin: 0 auto;
-    padding: 100px;  
-    width: 80%;    
+    padding: 100px;
+    width: 80%;
 }
 
 .article img {
@@ -142,10 +142,10 @@ blockquote p {
     font-size: 2.5rem;
     font-weight: 700;
     margin-top: 5rem;
-    border-bottom: 3px solid #796eff;    
+    border-bottom: 3px solid #796eff;
     padding-bottom: 10px;
     font-family: ubuntu, sans-serif;
-    margin-bottom: 30px;    
+    margin-bottom: 30px;
     display: inline-block;
     justify-content: center;
     align-items: center;
@@ -174,12 +174,12 @@ footer .social-links a {
     color: white;
 }
 
-footer ul {    
-    display: list-item;    
+footer ul {
+    display: list-item;
     text-align: justify;
     padding:0px;
-    list-style-type: none;     
-    padding-left:0; 
+    list-style-type: none;
+    padding-left:0;
 }
 
 .row {

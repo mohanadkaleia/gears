@@ -6,13 +6,13 @@
 </div>
 
 <div style="margin: 25px">
-    <a href="{{ config.SITEURL }}/vehicle/add" class="btn btn-info">Add New Vehicle</a>    
+    <a href="{{ config.SITEURL }}/vehicle/add" class="btn btn-info">Add New Vehicle</a>
 </div>
 
 
-<div class="card">    
+<div class="card">
     <div class="">
-        <table class="table table-hover card-body shadow bg-white rounded"> 
+        <table class="table table-hover card-body shadow bg-white rounded">
             <thead>
                 <tr>
                   <th scope="col">ID</th>
@@ -23,11 +23,11 @@
                   <th scope="col">Title</th>
                   <th scope="col">Price</th>
                   <th scope="col">Action</th>
-                </tr>            
+                </tr>
             </thead>
-    
+
             <tbody>
-                {% for vehicle in vehicles %}       
+                {% for vehicle in vehicles %}
                     <tr>
                         <th scope="row">{{ vehicle.vehicle_id }}</th>
                         <td>{{ vehicle.make }}</td>
@@ -36,15 +36,15 @@
                         <td>{{ vehicle.condition }}</td>
                         <td>{{ vehicle.title }}</td>
                         <td>{{ vehicle.price }}</td>
-                        <td>                            
+                        <td>
                             <button type="button" class="btn btn-info">View</button>
-                            <button type="button" class="btn btn-warning">Edit</button>                                                        
+                            <button type="button" class="btn btn-warning">Edit</button>
                             <a data-confirm="Are you sure?" data-method="get" href="{{ config.SITEURL }}/vehicle/delete/{{ vehicle.id }}" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% else %}
                 no vehicles yet in the inventory...
-                {% endfor %}                                
+                {% endfor %}
             </tbody>
         </table>
     </div>

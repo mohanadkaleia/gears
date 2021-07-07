@@ -1,6 +1,6 @@
 
 # Gears ⚙️
-A simple website to manage an auto shop. Built with ❤️ and little bit of Python for my uncle Deia! 
+A simple website to manage an auto shop. Built with ❤️ and little bit of Python for my uncle Deia!
 
 
 ## References
@@ -8,7 +8,7 @@ Architecture https://jamboard.google.com/d/1x_Djd7wHzHd2WO6CSQtPWnWnrPc0gJ4PtBeh
 
 ## How to install locally
 
-1. Create virtual environment 
+1. Create virtual environment
 2. Run the following command:
 ```
 python install -r requirments.txt

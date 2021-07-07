@@ -1,0 +1,7 @@
+# E203 whitespace before ':'
+# E302 expected 2 blank lines, found 1
+# W503 line break before binary operator
+[flake8]
+ignore = E203,E302,W503
+exclude = .git
+max-line-length = 250
