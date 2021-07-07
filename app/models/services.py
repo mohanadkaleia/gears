@@ -40,7 +40,7 @@ def insert(shop_id="", name="", description="", images=None):
 
 def delete(service_id):  
     query = tinydb.Query()         
-    services.remove(query.vehicle_id == service_id)        
+    services.remove(query.service_id == service_id)        
 
 
 def all():    
