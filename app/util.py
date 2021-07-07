@@ -7,7 +7,7 @@ import string
   
 def random_id(initial='i', size=8, chars=string.ascii_uppercase + string.digits): 
     """
-    Generate a random string with an initial, mainly used to generate ids
+    Generate a random string with an initial to be used for ids
 
     Args:
         initial (str, optional): first letter of the generated id. Defaults to 'i'.
