@@ -1,10 +1,10 @@
+from app.config import get_config
 from flask import render_template, request
 from app import app
 from app.models import vehicle
 from app.third_parties import sendemail
 
-
-config = {"SITEURL": "http://localhost:5000"}
+config = get_config()
 
 
 @app.route("/")
