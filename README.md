@@ -21,29 +21,11 @@ python run.py
 
 4. Open it using localhost and port 5000
 
+5. Optional, to install pre-commit hooks please run the following command:
+```
+pre-commit install
+```
 
-## TODO
+## License
 
-- Fix the main navigation by shifting it a bit to the middle
-
-- Fix the media links (should be Facebook, youtube, and email)
-
-- We should add some filters to the inventory page to search and filter results
-
-- The admin page should be a totally different theme
-
-- Add authentication to manage users to log in
-
-- Add manage services section
-
-- Contact us
-
-- Add appointment page
-
-- Add services page, this page should be populated based on the data from the database
-
-- Home page:
-
-- Add a new section for the testimonial
-
-- Fix how it looks on small screens
+## How to contribute
