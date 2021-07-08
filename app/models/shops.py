@@ -1,13 +1,15 @@
 import tinydb
-
+from app import util
 
 db = tinydb.TinyDB("db.json")
 shops = db.table("shops")
 
 # TODO: we need to generate an id for shops here
 def insert(name="", description="", logo="", phone="", email="", hours=""):
-    return shops.insert(
+    shop_id = util.random_id(initial="s")
+    shops.insert(
         {
+            "id": shop_id,
             "name": name,
             "description": description,
             "logo": logo,
@@ -16,3 +18,5 @@ def insert(name="", description="", logo="", phone="", email="", hours=""):
             "hours": hours,
         }
     )
+
+    return shop_id
