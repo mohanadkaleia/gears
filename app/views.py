@@ -9,7 +9,6 @@ config = {"SITEURL": "http://localhost:5000"}
 
 @app.route("/")
 def index():
-
     # shop_id = shops.insert(
     #     name="DKLube",
     #     description="Auto services",
