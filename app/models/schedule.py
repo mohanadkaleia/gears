@@ -1,5 +1,5 @@
 import tinydb
-
+import datetime
 from app import util
 
 
@@ -63,3 +63,11 @@ def get(id):
         raise ErrNotFound(f"no timeslot found for the provided id: {id}")
 
     return result[0]
+
+
+def get_booked_slots(start=None, limit=30):
+    if not start:
+        start = datetime.date.today()
+
+    query = tinydb.Query()
+    return db.search(query.timeslot >= start)[0 : limit - 1]
