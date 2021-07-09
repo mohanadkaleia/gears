@@ -1,0 +1,33 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Services' %}
+
+{% block action_buttons %}
+  <a href="/admin/services/adding" type="button" class="btn btn-sm btn-outline-primary">Add New</a>
+{% endblock %}
+
+{% block content %}
+  <table class="table table-hover table-striped table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Slug</th>
+        <th scope="col">Description</th>
+        <th scope="col">Price</th>
+        <th width="5%" scope="col"></th>
+      </tr>
+      <tbody>
+        {% for service in services %}
+          <tr>
+            <td>{{ service.name }}</td>
+            <td>{{ service.slug }}</td>
+            <td>{{ service.description }}</td>
+            <td>{{ service.price }}</td>
+            <td>
+              <a href="/admin/services/{{ service.id }}/editing" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </thead>
+  </table>
+{% endblock %}

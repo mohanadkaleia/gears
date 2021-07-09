@@ -1,0 +1,87 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Services' %}
+
+{% block action_buttons %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-8">
+      <form method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    <div class="mb-3">
+      <label class="form-label">
+        Name
+      </label>
+      {% if form.name.errors %}
+        {{ form.name(class="form-control is-invalid") }}
+        <div class="invalid-feedback">
+        {% for error in form.name.errors %}
+          {{ error }}
+        {% endfor %}
+        </div>
+        {% else %}
+        {{ form.name(class="form-control") }}
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        Description
+      </label>
+      {% if form.description.errors %}
+        {{ form.description(class="form-control is-invalid") }}
+        <div class="invalid-feedback">
+        {% for error in form.description.errors %}
+          {{ error }}
+        {% endfor %}
+        </div>
+        {% else %}
+        {{ form.description(class="form-control") }}
+      {% endif %}
+    </div>
+
+  <div class="mb-3">
+      <label class="form-label">
+        Price
+      </label>
+      {% if form.price.errors %}
+        {{ form.price(class="form-control is-invalid") }}
+        <div class="invalid-feedback">
+        {% for error in form.price.errors %}
+          {{ error }}
+        {% endfor %}
+        </div>
+        {% else %}
+        {{ form.price(class="form-control") }}
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        Images
+      </label>
+      {% if form.images.errors %}
+        {{ form.images(class="form-control is-invalid") }}
+        <div class="invalid-feedback">
+        {% for error in form.images.errors %}
+          {{ error }}
+        {% endfor %}
+        </div>
+        {% else %}
+        {{ form.images(class="form-control") }}
+      {% endif %}
+    </div>
+
+    <button class="btn btn-primary btn-sm" type="submit">Save</button>
+</form>
+    </div>
+    <div class="col">
+      {% for image in service.images %}
+        <img src="/static/uploaded/{{ service.id }}/{{ image }}" class="img-thumbnail" />
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,14 +1,21 @@
+from flask import render_template, request, redirect, url_for, abort
+
+from app import app, forms, util
 from app.config import get_config
-from flask import render_template, request
-from app import app
-import app.models.vehicles as vehicles_model
+from app.database import db
 from app.third_parties import sendemail
+from app.models import services, vehicles
+from app.models.services import Service, ServiceRepo
+from app.models.vehicles import Vehicle, VehicleRepo
+
 
 config = get_config()
 
 
 @app.route("/")
 def index():
+    vehicle_repo = VehicleRepo(db)
+    shop_repo = ServiceRepo(db)
     # shop_id = shops.insert(
     #     name="DKLube",
     #     description="Auto services",
@@ -21,37 +28,8 @@ def index():
     #     }
     # )
 
-    # TODO: this should be taken from db not hardcoded :)
-    services = [
-        {
-            "slug": "detail",
-            "cover": "/static/images/detail_service.jpeg",
-            "title": "Detail",
-            "summary": "Get the absolute best look for your paintwork and surfaces. A clean or a valet is about making sure all surfaces are, well, clean.",
-        },
-        {
-            "slug": "lube_oil_and_filters",
-            "cover": "http://dklube.com/assets/images/samples/390x260/image_02.jpg",
-            "title": "Lube, Oil, and Filters",
-            "summary": """An oil change and filter replacement is one of many preventative maintenance services that help promote maximum vehicle performance while extending the life of your vehicle.
-            Oil is responsible for lubricating the working components inside your vehicle's engine while reducing the amount of friction between them.""",
-        },
-        {
-            "slug": "inspection",
-            "cover": "http://dklube.com/assets/images/samples/390x260/image_03.jpg",
-            "title": "Inspection",
-            "summary": """Vehicle inspection is a procedure mandated by national or subnational governments in many countries, in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions, or both.
-            Inspection can be required at various times, e.g., periodically or on the transfer of title to a vehicle.""",
-        },
-        {
-            "slug": "tire_installation",
-            "cover": "/static/images/tire_installation.jpeg",
-            "title": "Tire Installation",
-            "summary": "Comming soon",
-        },
-    ]
-
-    vehicles = vehicles_model.all()
+    services = shop_repo.all()
+    vehicles = vehicle_repo.all()
     return render_template(
         "index.html", config=config, services=services, vehicles=vehicles[:3]
     )
@@ -59,17 +37,19 @@ def index():
 
 @app.route("/inventory")
 def inventory():
-    vehicles = vehicles_model.all()
+    vehicle_repo = VehicleRepo(db)
+    vehicles = vehicle_repo.all()
     return render_template("inventory.html", config=config, vehicles=vehicles)
 
 
 @app.route("/inventory/<id>")
 def get_vehicle(id):
     try:
+        vehicle_repo = VehicleRepo(db)
         # Search for the vehicle and render it
-        data = vehicles_model.get(id)
+        data = vehicle_repo.get(id)
         return render_template("vehicle_details.html", config=config, vehicle=data)
-    except vehicles_model.ErrVehicleNotFound:
+    except vehicles.ErrVehicleNotFound:
         # TODO: return a 404 page
         return "oops not vehicle found"
 
@@ -81,6 +61,8 @@ def vehicle_add():
 
 @app.route("/vehicle/save", methods=["POST"])
 def vehicle_save():
+    vehicle_repo = VehicleRepo(db)
+
     make = request.form["make"]
     model = request.form["model"]
     year = request.form["year"]
@@ -88,7 +70,7 @@ def vehicle_save():
     title = request.form["title"]
     price = request.form["price"]
 
-    vehicle_id = vehicles_model.insert(
+    vehicle_id = vehicle_repo.insert(
         make=make, model=model, year=year, price=price, title=title, condition=condition
     )
     return "Success " + vehicle_id
@@ -96,8 +78,9 @@ def vehicle_save():
 
 @app.route("/vehicle/delete", methods=["POST"])
 def vehicle_delete():
+    vehicle_repo = VehicleRepo(db)
     vehicle_id = request.form["vehicle_id"]
-    vehicles_model.delete(vehicle_id)
+    vehicle_repo.delete(vehicle_id)
     return "vehicle deleted"
 
 
@@ -108,14 +91,18 @@ def contact():
 
 @app.route("/admin")
 def admin():
-    vehicles = vehicles_model.all()
+    vehicle_repo = VehicleRepo(db)
+    vehicles = vehicle_repo.all()
     services = []
     return render_template("admin.html", vehicles=vehicles, services=services)
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        return redirect(url_for('services_management'))
 
 
 @app.route("/send_email", methods=["POST"])
@@ -130,3 +117,57 @@ def send_email():
         return "error"
 
     return "email sent"
+
+
+@app.route("/admin/services")
+def services_management():
+    repo = ServiceRepo(db)
+    services = repo.all()
+    return render_template('admin/services/service_list.html', services=services)
+
+
+@app.route("/admin/services/adding", methods=['GET', 'POST'])
+def services_adding():
+    form = forms.FormNewServices()
+
+    if form.validate_on_submit():
+        # When the form is valid take it data and save to database
+        repo = ServiceRepo(db)
+
+        service = Service.populate(form)
+        service.images = util.upload_files(form.images.data, service.upload_dir)
+        repo.insert(id=service.id,
+                    shop_id=service.shop_id,
+                    name=service.name,
+                    slug=service.slug,
+                    price=service.price,
+                    description=service.description,
+                    images=service.images)
+        return redirect(url_for('services_management'))
+
+    return render_template('admin/services/service_add.html', form=form)
+
+
+@app.route("/admin/services/<id>/editing", methods=['GET', 'POST'])
+def services_editing(id: str):
+    repo = ServiceRepo(db)
+
+    try:
+        service = repo.get(id=id)
+    except services.ErrNotFound:
+        abort(404)
+
+    form = forms.FormNewServices(obj=service)
+
+    if form.validate_on_submit():
+        service = Service.populate_edit(service, form)
+        service.images = util.upload_files(form.images.data, service.upload_dir)
+        repo.update(id=service.id,
+                    name=service.name,
+                    slug=service.slug,
+                    price=service.price,
+                    description=service.description,
+                    images=service.images)
+        return redirect(url_for('services_management'))
+
+    return render_template('admin/services/service_edit.html', form=form, service=service)
