@@ -18,6 +18,7 @@ vehicles = db.table("vehicles")
 
 # CRUD functions
 def insert(
+    shop_id=None,
     make="",
     model="",
     year="",
@@ -27,16 +28,18 @@ def insert(
     description="",
     images=None,
 ):
-    # Initialize id with randomly generated string
+    # TODO: validate the input data
+    pass
+
     vehicle_id = util.random_id(initial="v")
 
     if not images:
         images = []
 
-    # TODO: add shop id as a FK
     vehicles.insert(
         {
-            "vehicle_id": vehicle_id,
+            "id": vehicle_id,
+            "shop_id": shop_id,
             "make": make,
             "model": model,
             "year": year,
@@ -60,12 +63,7 @@ def delete(vehicle_id):
 
 
 def all():
-    results = vehicles.all()
-
-    if not results:
-        raise ErrVehicleNotFound("oops.. no vehicles found in the db")
-
-    return results
+    return vehicles.all()
 
 
 def get(vehicle_id):

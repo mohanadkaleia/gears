@@ -1,7 +1,7 @@
 from app.config import get_config
 from flask import render_template, request
 from app import app
-from app.models import vehicle
+import app.models.vehicles as vehicles_model
 from app.third_parties import sendemail
 
 config = get_config()
@@ -51,7 +51,7 @@ def index():
         },
     ]
 
-    vehicles = vehicle.all()
+    vehicles = vehicles_model.all()
     return render_template(
         "index.html", config=config, services=services, vehicles=vehicles[:3]
     )
@@ -59,7 +59,7 @@ def index():
 
 @app.route("/inventory")
 def inventory():
-    vehicles = vehicle.all()
+    vehicles = vehicles_model.all()
     return render_template("inventory.html", config=config, vehicles=vehicles)
 
 
@@ -67,9 +67,9 @@ def inventory():
 def get_vehicle(id):
     try:
         # Search for the vehicle and render it
-        data = vehicle.get(id)
+        data = vehicles_model.get(id)
         return render_template("vehicle_details.html", config=config, vehicle=data)
-    except vehicle.ErrVehicleNotFound:
+    except vehicles_model.ErrVehicleNotFound:
         # TODO: return a 404 page
         return "oops not vehicle found"
 
@@ -88,7 +88,7 @@ def vehicle_save():
     title = request.form["title"]
     price = request.form["price"]
 
-    vehicle_id = vehicle.insert(
+    vehicle_id = vehicles_model.insert(
         make=make, model=model, year=year, price=price, title=title, condition=condition
     )
     return "Success " + vehicle_id
@@ -97,7 +97,7 @@ def vehicle_save():
 @app.route("/vehicle/delete", methods=["POST"])
 def vehicle_delete():
     vehicle_id = request.form["vehicle_id"]
-    vehicle.delete(vehicle_id)
+    vehicles_model.delete(vehicle_id)
     return "vehicle deleted"
 
 
@@ -108,7 +108,7 @@ def contact():
 
 @app.route("/admin")
 def admin():
-    vehicles = vehicle.all()
+    vehicles = vehicles_model.all()
     services = []
     return render_template("admin.html", vehicles=vehicles, services=services)
 
