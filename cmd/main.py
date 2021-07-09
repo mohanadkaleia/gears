@@ -6,7 +6,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from app.models import services, shops, vehicles  # noqa
+from app.models import services, shops, vehicles, promos  # noqa
 
 
 class ErrNotFound(Exception):
@@ -103,10 +103,25 @@ def create_vehicles(shop_id):
         print(f"a vehicle with id {vehicle_id} has been created")
 
 
+def create_promo(shop_id):
+    code = "5DOLLARS_DISCOUNT"
+    try:
+        promo_id = promos.get_by_code(code)["id"]
+    except promos.ErrNotFound:
+        promo_id = promos.insert(
+            shop_id,
+            code=code,
+            description="Claim your discount when using any service at dklube",
+        )
+
+    print(f"a promo with id {promo_id} has been created")
+
+
 def main():
     shop_id = create_shop("DKLube & Detail")
     create_services(shop_id=shop_id)
     create_vehicles(shop_id)
+    create_promo(shop_id)
 
 
 if __name__ == "__main__":

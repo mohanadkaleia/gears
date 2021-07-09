@@ -59,7 +59,7 @@ def insert(
 
 def delete(vehicle_id):
     query = tinydb.Query()
-    vehicles.remove(query.vehicle_id == vehicle_id)
+    vehicles.remove(query.id == vehicle_id)
 
 
 def all():
