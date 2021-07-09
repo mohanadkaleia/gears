@@ -1,7 +1,37 @@
-from app.models import services
+import os
+import sys
+import inspect
 
-# TODO: initialize services
-pass
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+from app.models import services, shops  # noqa
+
+
+class ErrNotFound(Exception):
+    pass
+
+
+class ErrInvalidParameters(Exception):
+    pass
+
+
+def create_shop(name=""):
+    if not name:
+        raise ErrInvalidParameters("name is required")
+
+    try:
+        shop_id = shops.get_by_name(name)["id"]
+    except shops.ErrNotFound:
+        shop_id = shops.insert(
+            name=name,
+            description="""Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent purus ipsum, bibendum et metus quis, cursus hendrerit libero. Etiam aliquam, metus eu cursus dictum, risus ante volutpat augue,
+            non placerat ante massa vel mauris. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut ut scelerisque. """,
+        )
+
+    print(f"Created shop with id {shop_id}")
+    return shop_id
 
 
 def create_services(shop_id=None):
@@ -44,8 +74,9 @@ def create_services(shop_id=None):
 
 
 def main():
-    create_services(shop_id=1)
+    shop_id = create_shop("DKLube & Detail")
+    create_services(shop_id=shop_id)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
