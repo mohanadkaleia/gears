@@ -1,17 +1,18 @@
-# import os
-# import sys
-# import inspect
+import os
+import sys
+import inspect
 
-from app.database import db
-from app.models import shops, services, vehicles
-from app.models.shops import Shop, ShopRepo
-from app.models.services import Service, ServiceRepo
-from app.models.vehicles import Vehicle, VehicleRepo
+from pathlib import Path
 
 # currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 # parentdir = os.path.dirname(currentdir)
-# sys.path.insert(0, parentdir)
+sys.path.insert(0, str(Path.cwd()))
 
+from app.database import db
+from app.models import shops, services, vehicles, promos
+from app.models.shops import Shop, ShopRepo
+from app.models.services import Service, ServiceRepo
+from app.models.vehicles import Vehicle, VehicleRepo
 # from app.models import services, shops  # noqa
 
 
