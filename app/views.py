@@ -2,6 +2,7 @@ from app.config import get_config
 from flask import render_template, request
 from app import app
 import app.models.vehicles as vehicles_model
+import app.models.promos as promos_model
 from app.third_parties import sendemail
 
 config = get_config()
@@ -50,11 +51,12 @@ def index():
             "summary": "Comming soon",
         },
     ]
-
     vehicles = vehicles_model.all()
-    return render_template(
-        "index.html", config=config, services=services, vehicles=vehicles[:3]
-    )
+    promos = promos_model.all()
+
+    content = {"vehicles": vehicles, "services": services, "promos": promos}
+
+    return render_template("index.html", config=config, content=content)
 
 
 @app.route("/inventory")
