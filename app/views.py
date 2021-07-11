@@ -3,6 +3,8 @@ from flask import render_template, request
 from app import app
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
+import app.models.services as services_model
+
 from app.third_parties import sendemail
 
 config = get_config()
@@ -10,49 +12,9 @@ config = get_config()
 
 @app.route("/")
 def index():
-    # shop_id = shops.insert(
-    #     name="DKLube",
-    #     description="Auto services",
-    #     logo="logo",
-    #     phone="",
-    #     email="mohahad@kaleia.io",
-    #     hours={
-    #         "monday": "9 - 6",
-    #         "Friday": "9 - 3"
-    #     }
-    # )
-
-    # TODO: this should be taken from db not hardcoded :)
-    services = [
-        {
-            "slug": "detail",
-            "cover": "/static/images/detail_service.jpeg",
-            "title": "Detail",
-            "summary": "Get the absolute best look for your paintwork and surfaces. A clean or a valet is about making sure all surfaces are, well, clean.",
-        },
-        {
-            "slug": "lube_oil_and_filters",
-            "cover": "http://dklube.com/assets/images/samples/390x260/image_02.jpg",
-            "title": "Lube, Oil, and Filters",
-            "summary": """An oil change and filter replacement is one of many preventative maintenance services that help promote maximum vehicle performance while extending the life of your vehicle.
-            Oil is responsible for lubricating the working components inside your vehicle's engine while reducing the amount of friction between them.""",
-        },
-        {
-            "slug": "inspection",
-            "cover": "http://dklube.com/assets/images/samples/390x260/image_03.jpg",
-            "title": "Inspection",
-            "summary": """Vehicle inspection is a procedure mandated by national or subnational governments in many countries, in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions, or both.
-            Inspection can be required at various times, e.g., periodically or on the transfer of title to a vehicle.""",
-        },
-        {
-            "slug": "tire_installation",
-            "cover": "/static/images/tire_installation.jpeg",
-            "title": "Tire Installation",
-            "summary": "Comming soon",
-        },
-    ]
     vehicles = vehicles_model.all()
     promos = promos_model.all()
+    services = services_model.all()
 
     content = {"vehicles": vehicles, "services": services, "promos": promos}
 
