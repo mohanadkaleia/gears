@@ -4,9 +4,9 @@
 {% block pre_content %}
 {% for promo in content['promos'] %}
 <div class="alert alert-success d-flex align-items-center alert-dismissible fade show promo" role="alert">
-  <i class="fas fa-heart"></i>
   <div style="margin-left: 10px">
-    {{promo.code}} | {{promo.description}}
+    <i class="fas fa-heart"></i>
+    {{promo.code}} <br/> {{promo.description}}
   </div>
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
