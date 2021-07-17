@@ -21,12 +21,7 @@
     </div>
     <div class="col-6">
       <label for="datetime" class="form-label">Pick a date</label>
-      <input
-        type="date"
-        class="form-control"
-        id="datetime"
-        placeholder=""
-      />
+      <input class="form-control" id="datetime" placeholder=""/>
     </div>
     <div class="col-md-12">
       <label for="description" class="form-label">Description</label>
@@ -37,4 +32,18 @@
     </div>
   </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script>
+  const picker = new Litepicker({
+    element: document.getElementById('datetime'),
+    lockDaysFilter: (day) => {
+      const d = day.getDay();
+      return [7, 0].includes(d);
+    },
+    minDate: new Date() - 1,
+    // TODO: from the appointments we need to disable dates that are already reserved
+  });
+</script>
+
 {% endblock %}
