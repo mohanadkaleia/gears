@@ -27,5 +27,14 @@ pre-commit install
 ```
 
 ## License
+tbd
+
 
 ## How to contribute
+
+For contributionbs, please do the following:
+1. Follow the local installation
+2. Make sure to install `pre-commit` since it is used to do auto formatting and linting
+3. Fork this repo into your github accout,
+4. Do any change you like, then create a pull request, and I will review it as soon as I can
+5. Thank you for your contribution 🤓
