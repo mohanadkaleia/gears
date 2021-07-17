@@ -1,20 +1,35 @@
 {% extends "base.html" %}
+
+
+{% block pre_content %}
+{% for promo in content['promos'] %}
+<div class="alert alert-success d-flex align-items-center alert-dismissible fade show promo" role="alert">
+  <div style="margin-left: 10px">
+    <i class="fas fa-heart"></i>
+    {{promo.code}} <br/> {{promo.description}}
+  </div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endblock %}
+
+
 {% block content %}
 
 <div class="row">
     {% for service in services %}
     <div class="col-md-4 col-sm-12 col-12">
       <div class="card mb-4 shadow bg-white rounded">
-        <img src="{{ service.cover }}" class="card-img-top" alt="{{ service.title }}" height="225" width="100%">
+        <img src="{{ service["images"][0] }}" class="card-img-top" alt="{{ service['name'] }}" height="225" width="100%">
 
         <div class="card-body">
-          <h1><a href="/{{ service.slug }}.html">{{service.title}}</a></h1>
+          <h1><a href="/{{ service['slug'] }}.html">{{service['name']}}</a></h1>
           <p class="card-text">
             {{ service.summary|striptags }}
           </p>
           <div class="d-flex justify-content-between align-items-center">
             <div class="btn-group">
-              <a href="/{{ service.slug }}.html" class="btn btn-sm btn-outline-primary">
+              <a href="/{{ service['slug'] }}.html" class="btn btn-sm btn-outline-primary">
                 Details
               </a>
             </div>

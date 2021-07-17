@@ -1,14 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FloatField, FileField, TextField, MultipleFileField, TextAreaField
+from wtforms import FloatField, TextField, MultipleFileField, TextAreaField
 from wtforms.validators import ValidationError
-from wtforms.validators import DataRequired, Length
 
 
 class FormNewServices(FlaskForm):
-    name = TextField('name')
-    description = TextAreaField('description')
-    price = FloatField('price')
-    images = MultipleFileField('images')
+    name = TextField("name")
+    description = TextAreaField("description")
+    price = FloatField("price")
+    images = MultipleFileField("images")
 
     # TODO: Validate duplicated name
     @staticmethod

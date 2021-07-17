@@ -1,7 +1,10 @@
 import tinydb
-
 from pathlib import Path
 
 # DB initializtion
-DBJSON_PATH = Path.cwd() / Path("db.json")
-db = tinydb.TinyDB(str(DBJSON_PATH))
+db = tinydb.TinyDB(str(Path.cwd() / Path("db.json")))
+
+# Tables
+services = db.table("services")
+shops = db.table("shops")
+vehicles = db.table("vehicles")

@@ -1,19 +1,11 @@
 import os
-import sys
 import inspect
-
+import sys
 from pathlib import Path
 
-# currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-# parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, str(Path.cwd()))
-
-from app.database import db
-from app.models import shops, services, vehicles, promos
-from app.models.shops import Shop, ShopRepo
-from app.models.services import Service, ServiceRepo
-from app.models.vehicles import Vehicle, VehicleRepo
-# from app.models import services, shops  # noqa
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
 
 
 class ErrNotFound(Exception):
@@ -25,49 +17,80 @@ class ErrInvalidParameters(Exception):
 
 
 def create_shop(name=""):
-    repo = ShopRepo(db)
-
     if not name:
         raise ErrInvalidParameters("name is required")
 
     try:
-        shop = repo.get_by_name(name)
-        shop_id = shop.id
-    except shops.ErrNotFound:
-        new_shop = Shop(name=name,
-                        description="""Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent purus ipsum, bibendum et metus quis, cursus hendrerit libero. Etiam aliquam, metus eu cursus dictum, risus ante volutpat augue""")
-        shop_id = repo.insert(**new_shop.__dict__)
+        shop = shops_model.get_by_name(name)
+        shop_id = shop["id"]
+    except shops_model.ErrNotFound:
+        shop_id = shops_model.insert(
+            name=name,
+            description="""
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Praesent purus ipsum, bibendum et metus quis, cursus hendrerit libero.
+            Etiam aliquam, metus eu cursus dictum, risus ante volutpat augue""",
+        )
     print(f"Created shop with id {shop_id}")
     return shop_id
 
 
 def create_services(shop_id=None):
-    repo = ServiceRepo(db)
     seeds = [
         {
-            "name": "Detail",
-            "description": "Get the absolute best look for your paintwork and surfaces. A clean or a valet is about making sure all surfaces are, well, clean.",
-            "price": 40,
+            "name": "Auto Detailing",
+            "price": [
+                ["Wash & Vacuum", 40],
+                ["Carpet Shampoo", 40],
+                ["Tire Rims Shine", 40],
+                ["Windowns in/out", 40],
+                ["Door Jams", 40],
+                ["Full Detail", 189],
+            ],
             "images": ["/static/images/detail_service.jpeg"],
+            "description": """Auto detailing is an activity of systematically performing operations and
+            procedures that keep the vehicle in its best possible condition, especially cosmetic, as opposed to mechanical.
+            This is achieved by removing both visible and invisible contaminants from the vehicle's interior,
+            and polishing the exterior to its original blemish free finish.
+            The most basic detail options include an exterior wash and wax, interior vacuuming, window cleaning
+            and surface polishing.
+            Detail rate is $40 an hour with average 3 hours detail.
+            Number of hours needed to fully detail a car depends on the car situation itself.""",
         },
         {
             "name": "Lube, Oil, and Filters",
-            "images": ["/static/images/detail_service.jpeg"],
-            "price": 40,
-            "description": """An oil change and filter replacement is one of many preventative maintenance services that help promote maximum vehicle performance while extending the life of your vehicle.
-            Oil is responsible for lubricating the working components inside your vehicle's engine while reducing the amount of friction between them.""",
+            "images": [
+                "/static/images/oil_change_1.png",
+                "/static/images/oil_change_2.png",
+                "/static/images/oil_change_3.png",
+                "/static/images/oil_change_4.png",
+            ],
+            "price": [
+                ["Synthetic Blend up to 5QT & Filter", 45],
+                ["Fully synthetic up to 5QT & Filter", 60],
+            ],
+            "description": """
+                An oil change and filter replacement is one of many preventative maintenance services
+                that help promote maximum vehicle performance while extending the life of your vehicle.
+                Oil is responsible for lubricating the working components inside your vehicle's engine
+                while reducing the amount of friction between them.""",
         },
         {
             "name": "Inspection",
-            "images": ["/static/images/detail_service.jpeg"],
-            "price": 40,
-            "description": """Vehicle inspection is a procedure mandated by national or subnational governments in many countries,
-            in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions, or both. Inspection can be required at various times,
-            e.g., periodically or on the transfer of title to a vehicle.""",
+            "images": ["/static/images/inspection_1.png"],
+            "price": [["State Inspection", 25.50]],
+            "description": """
+            Vehicle inspection is a procedure mandated by national or subnational governments in many countries,
+            in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions,
+            or both.
+            Inspection can be required at various times,
+            e.g., periodically or on transfer of title to a vehicle.
+            If required periodically, it is often termed periodic motor vehicle inspection;
+            typical intervals are every two years and every year""",
         },
         {
             "name": "Tire Installation",
-            "price": 40,
+            "price": [],
             "images": ["/static/images/tire_installation.jpeg"],
             "description": "Comming soon",
         },
@@ -75,15 +98,19 @@ def create_services(shop_id=None):
 
     for service in seeds:
         try:
-            repo.get_by_name(service["name"])
-        except services.ErrNotFound:
-            new_service = Service(shop_id=shop_id, **service)
-            repo.insert(**new_service.__dict__)
-            print(f"Service {new_service.name} has been added")
+            services_model.get_by_name(service["name"])
+        except services_model.ErrNotFound:
+            services_model.insert(
+                shop_id=shop_id,
+                name=service["name"],
+                price=service["price"],
+                description=service["description"],
+                images=service["images"],
+            )
+            print(f"Service {service['name']} has been added")
 
 
 def create_vehicles(shop_id):
-    repo = VehicleRepo(db)
     if not shop_id:
         raise ErrInvalidParameters("shop_id is required")
 
@@ -91,8 +118,8 @@ def create_vehicles(shop_id):
 
     # We only need to add 3 vehicles
     try:
-        result = repo.all()
-    except vehicles.ErrVehicleNotFound:
+        result = vehicles_model.all()
+    except vehicles_model.ErrVehicleNotFound:
         result = []
 
     if len(result) >= vehicles_number:
@@ -102,24 +129,25 @@ def create_vehicles(shop_id):
     models = ["mx5", "corolla", "civic"]
 
     for x in range(vehicles_number - len(result)):
-        new_vehicle = Vehicle(shop_id=shop_id,
-                              make=makes[x],
-                              model=models[x],
-                              year="2015",
-                              price="10000",
-                              title="clean",
-                              condition="good",
-                              description="nice car")
-        vehicle_id = repo.insert(**new_vehicle.__dict__)
+        vehicle_id = vehicles_model.insert(
+            shop_id=shop_id,
+            make=makes[x],
+            model=models[x],
+            year="2015",
+            price="10000",
+            title="clean",
+            condition="good",
+            description="nice car",
+        )
         print(f"a vehicle with id {vehicle_id} has been created")
 
 
 def create_promo(shop_id):
     code = "5DOLLARS_DISCOUNT"
     try:
-        promo_id = promos.get_by_code(code)["id"]
-    except promos.ErrNotFound:
-        promo_id = promos.insert(
+        promo_id = promos_model.get_by_code(code)["id"]
+    except promos_model.ErrNotFound:
+        promo_id = promos_model.insert(
             shop_id,
             code=code,
             description="Claim your discount when using any service at dklube",
@@ -136,4 +164,11 @@ def main():
 
 
 if __name__ == "__main__":
+    from app.models import (
+        shops as shops_model,
+        services as services_model,
+        vehicles as vehicles_model,
+        promos as promos_model,
+    )
+
     main()

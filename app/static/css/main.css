@@ -219,3 +219,12 @@ footer ul {
   .nav-link {
       color: #796eff !important;
   }
+
+.promo {
+    position: fixed;
+    display: block;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    margin-right: 10px;
+}

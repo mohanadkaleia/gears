@@ -6,80 +6,91 @@
 {% endblock %}
 
 {% block content %}
+  <script>
+    $(document).ready(() => {
+      $("#editService").submit((e) => {
+        e.preventDefault();
+        let serviceId = `{{ service["id"] }}`;
+        let payload = new FormData();
+        payload.append("name", $("#name").val());
+        payload.append("description", $("#description").val());
+        for (let i=0; i < $(".price-row").length; i+=2) {
+          payload.append("price", [
+            $($(".price-row")[i]).val(),
+            $($(".price-row")[i+1]).val()
+          ]);
+        }
+        $.each($("#images")[0].files, (i, file) => {
+          payload.append("images", file);
+        });
+        $.ajax({
+          url: `/admin/services/${serviceId}/editing`,
+          type: "POST",
+          data: payload,
+          contentType: false,
+          processData: false
+        }).done((resp) => {
+          window.location.href = "/admin/services"
+        })
+      });
+
+      // Adding new row to price
+      $('#addPriceRow').click(() => {
+        $("#priceRows").append(`
+          <div class="input-group mb-1">
+            <input class="price-row form-control" type="text"/>
+            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
+            <input class="price-row form-control" type="text"/>
+            <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
+          </div>
+        `);
+      });
+      // Deleting a price row
+      $('.price-del-row').click((e) => {
+        $(e.currentTarget).parent().remove();
+      });
+    });
+  </script>
+
   <div class="row">
     <div class="col-8">
-      <form method="POST" enctype="multipart/form-data">
-    {{ form.csrf_token }}
-    <div class="mb-3">
-      <label class="form-label">
-        Name
-      </label>
-      {% if form.name.errors %}
-        {{ form.name(class="form-control is-invalid") }}
-        <div class="invalid-feedback">
-        {% for error in form.name.errors %}
-          {{ error }}
-        {% endfor %}
+      <form id="editService" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input id="name" type="text" class="form-control" name="name" value="{{ service["name"] }}">
         </div>
-        {% else %}
-        {{ form.name(class="form-control") }}
-      {% endif %}
-    </div>
 
-    <div class="mb-3">
-      <label class="form-label">
-        Description
-      </label>
-      {% if form.description.errors %}
-        {{ form.description(class="form-control is-invalid") }}
-        <div class="invalid-feedback">
-        {% for error in form.description.errors %}
-          {{ error }}
-        {% endfor %}
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea id="description" name="description" class="form-control" rows="3">{{ service["description"] }}</textarea>
         </div>
-        {% else %}
-        {{ form.description(class="form-control") }}
-      {% endif %}
-    </div>
 
-  <div class="mb-3">
-      <label class="form-label">
-        Price
-      </label>
-      {% if form.price.errors %}
-        {{ form.price(class="form-control is-invalid") }}
-        <div class="invalid-feedback">
-        {% for error in form.price.errors %}
-          {{ error }}
-        {% endfor %}
+        <div class="mb-3">
+          <label class="form-label">Images</label>
+          <input name="images" multiple="multiple" class="form-control" type="file" id="images">
         </div>
-        {% else %}
-        {{ form.price(class="form-control") }}
-      {% endif %}
-    </div>
 
-    <div class="mb-3">
-      <label class="form-label">
-        Images
-      </label>
-      {% if form.images.errors %}
-        {{ form.images(class="form-control is-invalid") }}
-        <div class="invalid-feedback">
-        {% for error in form.images.errors %}
-          {{ error }}
-        {% endfor %}
+        <div class="mb-3" id="priceRows">
+          <label class="form-label">
+            Price
+          </label>
+              <button id="addPriceRow" type="button" class="btn btn-sm btn-link">Add Price</button>
+          {% for price in service["price"] %}
+            <div class="input-group mb-1">
+              <input value="{{ price[0] }}" class="price-row form-control" type="text"/>
+              <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
+              <input value="{{ price[1] }}" class="price-row form-control" type="text"/>
+              <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
+            </div>
+          {% endfor %}
         </div>
-        {% else %}
-        {{ form.images(class="form-control") }}
-      {% endif %}
-    </div>
 
-    <button class="btn btn-primary btn-sm" type="submit">Save</button>
-</form>
+        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+      </form>
     </div>
     <div class="col">
       {% for image in service.images %}
-        <img src="/static/uploaded/{{ service.id }}/{{ image }}" class="img-thumbnail" />
+        <img src="{{ image }}" class="img-thumbnail" />
       {% endfor %}
     </div>
   </div>
