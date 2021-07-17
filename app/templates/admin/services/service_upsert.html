@@ -1,0 +1,129 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Services' %}
+
+{% block action_buttons %}
+
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-8">
+      <form id="serviceForm" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input id="name" type="text" class="form-control" name="name" value="{{ service["name"] if service else '' }}">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea id="description" name="description" class="form-control" rows="3">{{ service["description"] if service else '' }}</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Images</label>
+          <input name="images" multiple="multiple" class="form-control" type="file" id="images">
+        </div>
+
+        <div class="mb-3" id="priceRows">
+          <label class="form-label">
+            Price <button id="addPriceRow" type="button" class="btn btn-sm btn-light"><i class="fas fa-plus"></i>{{ ' ' }}Add Price</button>
+          </label>
+
+          {% if service  %}
+            {% for price in service["price"] %}
+              <div class="input-group mb-1">
+                <input value="{{ price[0] }}" class="price-row form-control" type="text"/>
+                <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
+                <input value="{{ price[1] }}" class="price-row form-control" type="text"/>
+                <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <button class="btn btn-primary btn-sm" type="submit">Save</button>
+      </form>
+    </div>
+    <div class="col">
+      {% if service %}
+        {% for image in service.images %}
+          <img src="{{ image }}" class="img-thumbnail" />
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    const addService = (payload) => {
+      $.ajax({
+          url: `/admin/services/adding`,
+          type: "POST",
+          data: payload,
+          contentType: false,
+          processData: false
+        }).done((resp) => {
+          window.location.href = "/admin/services"
+        })
+    };
+
+    const editService = (serviceId, payload) => {
+      $.ajax({
+          url: `/admin/services/${serviceId}/editing`,
+          type: "POST",
+          data: payload,
+          contentType: false,
+          processData: false
+        }).done((resp) => {
+          window.location.href = "/admin/services"
+        })
+    };
+
+    $(document).ready(() => {
+      $("#serviceForm").submit((e) => {
+        e.preventDefault();
+        let mode = `{{ mode }}`;  // This from views, to determine what mode of the form. Adding or Editingß
+
+        // Collect data from the form
+        let payload = new FormData();
+        payload.append("name", $("#name").val());
+        payload.append("description", $("#description").val());
+        for (let i=0; i < $(".price-row").length; i+=2) {
+          payload.append("price", [
+            $($(".price-row")[i]).val(),
+            $($(".price-row")[i+1]).val()
+          ]);
+        }
+        $.each($("#images")[0].files, (i, file) => {
+          payload.append("images", file);
+        });
+
+        // Depends on the mode from the views. it will code add or edit
+        if (mode === 'add') {
+          addService(payload);
+        }
+        else {
+          let serviceId = `{{ service["id"] if service else '' }}`;
+          editService(serviceId, payload);
+        }
+      });
+
+      // Adding new row to price
+      $('#addPriceRow').click(() => {
+        $("#priceRows").append(`
+          <div class="input-group mb-1">
+            <input class="price-row form-control" type="text"/>
+            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
+            <input class="price-row form-control" type="text"/>
+            <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
+          </div>
+        `);
+      });
+      // Deleting a price row
+      $('.price-del-row').click((e) => {
+        $(e.currentTarget).parent().remove();
+      });
+    });
+  </script>
+{% endblock %}

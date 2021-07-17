@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, abort, jsonify
 
-from app import forms, util
+from app import util
 from app.config import get_config
 from app import app
 import app.models.promos as promos_model
@@ -114,22 +114,23 @@ def services_management():
 
 @app.route("/admin/services/adding", methods=["GET", "POST"])
 def services_adding():
-    form = forms.FormNewServices()
+    if request.method == "POST":
+        images = None
+        if request.files.getlist("images"):
+            images = util.upload_files(
+                request.files.getlist("images"), app.config["IMAGES_DIR_PATH"]
+            )
+            images = [f"/static/images/{filename}" for filename in images]
 
-    if form.validate_on_submit():
-        # When the form is valid take it data and save to database
-        # Upload images to disk and get files name if any
-        images = util.upload_files(form.images.data, app.config["IMAGES_DIR_PATH"])
+        price = [price.split(",") for price in request.form.getlist("price")]
         services_model.insert(
-            shop_id="FAKE SHOP ID",
-            name=form.name.data,
-            price=form.price.data,
-            description=form.description.data,
+            name=request.form["name"],
+            price=price,
+            description=request.form["description"],
             images=images,
         )
-        return redirect(url_for("services_management"))
-
-    return render_template("admin/services/service_add.html", form=form)
+        return jsonify(data="OK")
+    return render_template("admin/services/service_upsert.html", mode="add")
 
 
 @app.route("/admin/services/<id>/editing", methods=["GET", "POST"])
@@ -158,4 +159,6 @@ def services_editing(id: str):
         )
         return jsonify(data="OK")
     else:
-        return render_template("admin/services/service_edit.html", service=service)
+        return render_template(
+            "admin/services/service_upsert.html", service=service, mode="edit"
+        )
