@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="row justify-content-md-center">
+  <form class="row g-3">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" />
+    </div>
+    <div class="col-md-6">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" />
+    </div>
+    <div class="col-6">
+      <label for="vehicle" class="form-label">Your vehicle</label>
+      <input
+        type="text"
+        class="form-control"
+        id="vehicle"
+        placeholder="Make/Model/Year"
+      />
+    </div>
+    <div class="col-6">
+      <label for="datetime" class="form-label">Pick a date</label>
+      <input
+        type="date"
+        class="form-control"
+        id="datetime"
+        placeholder=""
+      />
+    </div>
+    <div class="col-md-12">
+      <label for="description" class="form-label">Description</label>
+      <textarea name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Book an appointment</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
