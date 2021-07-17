@@ -96,6 +96,11 @@ def send_email():
     return "email sent"
 
 
+@app.route("/appointment")
+def appointment():
+    return render_template("appointment.html", config=config)
+
+
 @app.errorhandler(404)
 def page_not_found(error):
     return "oops.. page not found 😝"
