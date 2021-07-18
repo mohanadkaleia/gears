@@ -26,6 +26,12 @@ python run.py
 pre-commit install
 ```
 
+## Generate mock data
+To generate fake data to test with during development, you can use `cmd`:
+```
+python cmd/main.py
+```
+
 ## License
 tbd
 
