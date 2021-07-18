@@ -42,7 +42,11 @@
       return [7, 0].includes(d);
     },
     minDate: new Date() - 1,
-    // TODO: from the appointments we need to disable dates that are already reserved
+    lockDays: [
+    {% for timeslot in data.appointments %}
+        "{{ timeslot }}",
+    {% endfor %}
+    ]
   });
 </script>
 

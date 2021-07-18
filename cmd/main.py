@@ -1,3 +1,4 @@
+import datetime
 import os
 import sys
 import inspect
@@ -6,7 +7,7 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from app.models import services, shops, vehicles, promos  # noqa
+from app.models import services, shops, vehicles, promos, appointments  # noqa
 
 
 class ErrNotFound(Exception):
@@ -60,17 +61,21 @@ def create_services(shop_id=None):
             "description": "Comming soon",
         },
     ]
-
+    services_ids = []
     for service in seeds:
         try:
-            services.get_by_name(service["name"])
+            service = services.get_by_name(service["name"])
+            services_ids.append(service["id"])
         except services.ErrNotFound:
-            services.insert(
+            id = services.insert(
                 shop_id=shop_id,
                 name=service["name"],
                 description=service["description"],
             )
+            services_ids.append(id)
             print(f"Service {service['name']} has been added")
+
+    return services_ids
 
 
 def create_vehicles(shop_id):
@@ -117,12 +122,35 @@ def create_promo(shop_id):
     print(f"a promo with id {promo_id} has been created")
 
 
+def create_appointments(shop_id, service_id):
+    # insert two appointments
+    appointments.insert(
+        shop_id,
+        service_id,
+        datetime.datetime.today(),
+        "mohanad",
+        "mohanad.kaleia@gmail.com",
+        "mazda",
+        "need some detailing work",
+    )
+    appointments.insert(
+        shop_id,
+        service_id,
+        datetime.datetime.today() + datetime.timedelta(1),
+        "mohanad",
+        "mohanad.kaleia@gmail.com",
+        "toyota",
+        "need some oid change work",
+    )
+
+
 def main():
     shop_id = create_shop("DKLube & Detail")
-    create_services(shop_id=shop_id)
+    s_ids = create_services(shop_id=shop_id)
     create_vehicles(shop_id)
     create_promo(shop_id)
+    create_appointments(shop_id, s_ids[0])
 
 
 if __name__ == "__main__":
-    main()
+    print(appointments.get_booked_slots())

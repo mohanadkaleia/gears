@@ -22,11 +22,11 @@ def insert(shop_id="", name="", description="", images=None):
         images = []
 
     # Initialize id with randomly generated string
-    service_id = util.random_id(initial="s")
+    id = util.random_id(initial="s")
 
     services.insert(
         {
-            "service_id": service_id,
+            "id": id,
             "shop_id": shop_id,
             "name": name,
             "slug": slugify(name),
@@ -38,12 +38,12 @@ def insert(shop_id="", name="", description="", images=None):
     # TODO: upload images into disk
     pass
 
-    return service_id
+    return id
 
 
-def delete(service_id):
+def delete(id):
     query = tinydb.Query()
-    services.remove(query.service_id == service_id)
+    services.remove(query.id == id)
 
 
 def all():
@@ -55,12 +55,12 @@ def all():
     return results
 
 
-def get(service_id):
+def get(id):
     service = tinydb.Query()
-    result = services.search(service.service_id == service_id)
+    result = services.search(service.id == id)
 
     if not result:
-        raise ErrNotFound(f"no service found for the provided id: {service_id}")
+        raise ErrNotFound(f"no service found for the provided id: {id}")
 
     return result[0]
 

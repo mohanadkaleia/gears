@@ -4,6 +4,7 @@ from app import app
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
 import app.models.services as services_model
+import app.models.appointments as appintments_model
 
 from app.third_parties import sendemail
 
@@ -98,7 +99,11 @@ def send_email():
 
 @app.route("/appointment")
 def appointment():
-    return render_template("appointment.html", config=config)
+    booked_appointments = appintments_model.get_booked_slots()
+    timeslots = [a["timeslot"].date() for a in booked_appointments]
+    print(timeslots)
+    data = {"appointments": timeslots}
+    return render_template("appointment.html", config=config, data=data)
 
 
 @app.errorhandler(404)
