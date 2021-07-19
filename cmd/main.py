@@ -38,25 +38,61 @@ def create_shop(name=""):
 def create_services(shop_id=None):
     seeds = [
         {
-            "name": "Detail",
-            "description": "Get the absolute best look for your paintwork and surfaces. A clean or a valet is about making sure all surfaces are, well, clean.",
+            "name": "Auto Detailing",
+            "price": [
+                ["Wash & Vacuum", 40],
+                ["Carpet Shampoo", 40],
+                ["Tire Rims Shine", 40],
+                ["Windowns in/out", 40],
+                ["Door Jams", 40],
+                ["Full Detail", 189],
+            ],
             "images": ["/static/images/detail_service.jpeg"],
+            "description": """Auto detailing is an activity of systematically performing operations and
+                procedures that keep the vehicle in its best possible condition, especially cosmetic, as opposed to mechanical.
+                This is achieved by removing both visible and invisible contaminants from the vehicle's interior,
+                and polishing the exterior to its original blemish free finish.
+                The most basic detail options include an exterior wash and wax, interior vacuuming, window cleaning
+                and surface polishing.
+                Detail rate is $40 an hour with average 3 hours detail.
+                Number of hours needed to fully detail a car depends on the car situation itself.""",
         },
         {
             "name": "Lube, Oil, and Filters",
-            "images": ["/static/images/detail_service.jpeg"],
-            "description": """An oil change and filter replacement is one of many preventative maintenance services that help promote maximum vehicle performance while extending the life of your vehicle.
-            Oil is responsible for lubricating the working components inside your vehicle's engine while reducing the amount of friction between them.""",
+            "images": [
+                "/static/images/oil_change_1.png",
+                "/static/images/oil_change_2.png",
+                "/static/images/oil_change_3.png",
+                "/static/images/oil_change_4.png",
+            ],
+            "price": [
+                ["Synthetic Blend up to 5QT & Filter", 45],
+                ["Fully synthetic up to 5QT & Filter", 60],
+            ],
+            "description": """
+                    An oil change and filter replacement is one of many preventative maintenance services
+                    that help promote maximum vehicle performance while extending the life of your vehicle.
+                    Oil is responsible for lubricating the working components inside your vehicle's engine
+                    while reducing the amount of friction between them.""",
         },
         {
             "name": "Inspection",
-            "images": ["/static/images/detail_service.jpeg"],
-            "description": """Vehicle inspection is a procedure mandated by national or subnational governments in many countries,
-            in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions, or both. Inspection can be required at various times,
-            e.g., periodically or on the transfer of title to a vehicle.""",
+            "images": ["/static/images/inspection_1.png"],
+            "price": [
+                ["State Inspection", 25.50]
+            ],
+            "description": """
+                Vehicle inspection is a procedure mandated by national or subnational governments in many countries,
+                in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions,
+                or both.
+                Inspection can be required at various times,
+                e.g., periodically or on transfer of title to a vehicle.
+                If required periodically, it is often termed periodic motor vehicle inspection;
+                typical intervals are every two years and every year""",
         },
         {
             "name": "Tire Installation",
+            "price": [],
             "images": ["/static/images/tire_installation.jpeg"],
             "description": "Comming soon",
         },
@@ -71,6 +107,7 @@ def create_services(shop_id=None):
                 shop_id=shop_id,
                 name=service["name"],
                 description=service["description"],
+                price=service["price"]
             )
             services_ids.append(id)
             print(f"Service {service['name']} has been added")
@@ -153,4 +190,5 @@ def main():
 
 
 if __name__ == "__main__":
+    main()
     print(appointments.get_booked_slots())
