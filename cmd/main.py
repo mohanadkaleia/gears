@@ -39,14 +39,14 @@ def create_services(shop_id=None):
     seeds = [
         {
             "name": "Auto Detailing",
-            "price": [
-                ["Wash & Vacuum", 40],
-                ["Carpet Shampoo", 40],
-                ["Tire Rims Shine", 40],
-                ["Windowns in/out", 40],
-                ["Door Jams", 40],
-                ["Full Detail", 189],
-            ],
+            "price": {
+                "Wash & Vacuum": 40,
+                "Carpet Shampoo": 40,
+                "Tire Rims Shine": 40,
+                "Windows in/out": 40,
+                "Door Jams": 40,
+                "Full Detail": 189,
+            },
             "images": ["/static/images/detail_service.jpeg"],
             "description": """Auto detailing is an activity of systematically performing operations and
                 procedures that keep the vehicle in its best possible condition, especially cosmetic, as opposed to mechanical.
@@ -65,10 +65,10 @@ def create_services(shop_id=None):
                 "/static/images/oil_change_3.png",
                 "/static/images/oil_change_4.png",
             ],
-            "price": [
-                ["Synthetic Blend up to 5QT & Filter", 45],
-                ["Fully synthetic up to 5QT & Filter", 60],
-            ],
+            "price": {
+                "Synthetic Blend up to 5QT & Filter": 45,
+                "Fully synthetic up to 5QT & Filter": 60,
+            },
             "description": """
                     An oil change and filter replacement is one of many preventative maintenance services
                     that help promote maximum vehicle performance while extending the life of your vehicle.
@@ -78,9 +78,7 @@ def create_services(shop_id=None):
         {
             "name": "Inspection",
             "images": ["/static/images/inspection_1.png"],
-            "price": [
-                ["State Inspection", 25.50]
-            ],
+            "price": {"State Inspection": 25.50},
             "description": """
                 Vehicle inspection is a procedure mandated by national or subnational governments in many countries,
                 in which a vehicle is inspected to ensure that it conforms to regulations governing safety, emissions,
@@ -92,7 +90,7 @@ def create_services(shop_id=None):
         },
         {
             "name": "Tire Installation",
-            "price": [],
+            "price": dict(),
             "images": ["/static/images/tire_installation.jpeg"],
             "description": "Comming soon",
         },
@@ -107,7 +105,7 @@ def create_services(shop_id=None):
                 shop_id=shop_id,
                 name=service["name"],
                 description=service["description"],
-                price=service["price"]
+                price=service["price"],
             )
             services_ids.append(id)
             print(f"Service {service['name']} has been added")

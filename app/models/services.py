@@ -42,7 +42,7 @@ def update(id="", shop_id="", name="", description="", price="", images=None):
         "slug": slugify(name),
         "description": description,
         "price": price,
-        "images": images if images is not None else [],
+        "images": images,
     }
     services.update(doc, query.id == id)
     return id

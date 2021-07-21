@@ -1,5 +1,5 @@
 from app.config import get_config
-from flask import render_template, request, jsonify, abort, flash
+from flask import render_template, request, abort, flash, redirect, url_for
 from app import app, util
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
@@ -84,51 +84,29 @@ def admin_services_management():
     return render_template("admin/services/index.html", services=services)
 
 
-@app.route("/admin/services/adding", methods=["GET", "POST"])
-def admin_services_adding():
-    if request.method == "POST":
-        images = None
-        if request.files.getlist("images"):
-            images = util.upload_files(
-                request.files.getlist("images"), app.config["IMAGES_DIR_PATH"]
-            )
-
-        price = [price.split(",") for price in request.form.getlist("price")]
-        services_model.insert(
-            name=request.form["name"],
-            price=price,
-            description=request.form["description"],
-            images=images,
+@app.route("/admin/services/save", methods=["POST"])
+def admin_services_save():
+    updated_images = None
+    if request.files.getlist("images"):
+        updated_images = util.upload_files(
+            request.files.getlist("images"), app.config["IMAGES_DIR_PATH"]
         )
-        flash('Service has been created')
-        return jsonify(data="OK")
-    return render_template("admin/services/upsert.html", mode="add")
-
-
-@app.route("/admin/services/<id>/editing", methods=["GET", "POST"])
-def admin_services_editing(id: str):
-    service = {}
-    try:
-        service = services_model.get(id=id)
-    except services_model.ErrNotFound:
-        abort(404)
-
-    if request.method == "POST":
-        # Convert to set to be able to - with rm images
-        images = set(service["images"])
-        rm_images = set(request.form.getlist('rmImages'))
-        images -= rm_images
-
-        # remove images from disk
-        util.remove_files(list(rm_images), app.config["IMAGES_DIR_PATH"])
-
-        if request.files.getlist("images"):
-            uploaded_images = util.upload_files(
-                request.files.getlist("images"), app.config["IMAGES_DIR_PATH"]
+    price = {
+        price[0]: price[1]
+        for price in list(
+            zip(
+                request.form.getlist("price_names[]"),
+                request.form.getlist("price_values[]"),
             )
-            images |= set(uploaded_images)
+        )
+    }
+    try:
+        service = services_model.get(id=request.form.get("service_id"))
+        # get current set of images
+        images = set(service["images"])
+        # add updated images if any
+        images |= set(updated_images)
 
-        price = [price.split(",") for price in request.form.getlist("price")]
         services_model.update(
             id=service["id"],
             name=request.form["name"],
@@ -136,20 +114,68 @@ def admin_services_editing(id: str):
             description=request.form["description"],
             images=list(images),
         )
-        flash('Service has been updated')
-        return jsonify(data="OK")
-    else:
-        return render_template("admin/services/upsert.html", service=service, mode="edit")
+        flash("Service has been updated")
+        return redirect(url_for("admin_services_edit", id=service["id"]))
+    except services_model.ErrNotFound:
+        images = updated_images or None
+        services_model.insert(
+            name=request.form["name"],
+            price=price,
+            description=request.form["description"],
+            images=images,
+        )
+        flash("Service has been created")
+        return redirect(url_for("admin_services_add"))
 
 
-@app.route("/admin/services/<id>/deleting", methods=["POST"])
+@app.route("/admin/services/add")
+def admin_services_add():
+    return render_template("admin/services/upsert.html", mode="add")
+
+
+@app.route("/admin/services/<id>/images/remove", methods=["POST"])
+def admin_services_images_remove(id):
+    try:
+        # remove images from disk if any
+        rm_image = request.form.get("image")
+        util.remove_files([rm_image], app.config["IMAGES_DIR_PATH"])
+
+        service = services_model.get(id=id)
+        # get current set of images and update it
+        service["images"].remove(rm_image)
+
+        services_model.update(
+            id=service["id"],
+            name=service["name"],
+            price=service["price"],
+            description=service["description"],
+            images=service["images"],
+        )
+        flash("Removed image")
+        return redirect(url_for("admin_services_edit", id=service["id"]))
+    except services_model.ErrNotFound:
+        abort(404)
+
+
+@app.route("/admin/services/<id>/edit")
+def admin_services_edit(id: str):
+    try:
+        service = services_model.get(id=id)
+        return render_template(
+            "admin/services/upsert.html", service=service, mode="edit"
+        )
+    except services_model.ErrNotFound:
+        abort(404)
+
+
+@app.route("/admin/services/<id>/delete", methods=["POST"])
 def admin_services_deleting(id):
     service = services_model.get(id)
     # Remove image of this service
-    util.remove_files(service["images"], app.config['IMAGES_DIR_PATH'])
+    util.remove_files(service["images"], app.config["IMAGES_DIR_PATH"])
     services_model.delete(id)
     flash("Service has been deleted")
-    return jsonify(message="OK")
+    return redirect(url_for("admin_services_management"))
 
 
 @app.route("/login")

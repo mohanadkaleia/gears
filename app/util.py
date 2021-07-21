@@ -27,6 +27,9 @@ def random_id(initial="i", size=8, chars=string.ascii_uppercase + string.digits)
 def upload_files(files, target_dir):
     uploaded_files = []
     for image in files:
+        # Validate, e.g file at least has name
+        if not image:
+            continue
         filename = secure_filename(image.filename)
         filepath = Path(target_dir) / Path(filename)
         image.save(filepath)

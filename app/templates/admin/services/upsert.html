@@ -8,15 +8,18 @@
 {% block content %}
   <div class="row">
     <div class="col-8">
-      <form id="serviceForm" method="POST" enctype="multipart/form-data">
+      <form id="serviceForm" action="/admin/services/save" method="POST" enctype="multipart/form-data">
+        {% if service %}
+          <input name="service_id" type="hidden" value="{{ service['id'] }}"/>
+        {% endif %}
         <div class="mb-3">
           <label class="form-label">Name</label>
-          <input id="name" type="text" class="form-control" name="name" value="{{ service["name"] if service else '' }}">
+          <input id="name" type="text" class="form-control" name="name" value="{{ service['name'] if service else '' }}">
         </div>
 
         <div class="mb-3">
           <label class="form-label">Description</label>
-          <textarea id="description" name="description" class="form-control" rows="3">{{ service["description"] if service else '' }}</textarea>
+          <textarea id="description" name="description" class="form-control" rows="3">{{ service['description'] if service else '' }}</textarea>
         </div>
 
         <div class="mb-3">
@@ -32,11 +35,11 @@
             Add Price
           </button>
           {% if service  %}
-            {% for price in service["price"] %}
+            {% for name in service["price"] %}
               <div class="input-group mb-1">
-                <input value="{{ price[0] }}" class="price-row form-control" type="text" placeholder="Name..."/>
+                <input name="price_names[]" value="{{ name }}" class="price-row form-control" type="text" placeholder="Name..."/>
                 <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
-                <input value="{{ price[1] }}" class="price-row form-control" type="text" placeholder="Price..."/>
+                <input name="price_values[]" value="{{ service["price"][name] }}" class="price-row form-control" type="text" placeholder="Price..."/>
                 <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
               </div>
             {% endfor %}
@@ -54,10 +57,13 @@
         </label>
         {% for image in service.images %}
           <div class="mb-3">
-            <img src="/static/images/{{ image }}" class="img-thumbnail" title="{{ image }}"/>
-            <div class="d-grid">
-              <button data-img="{{ image }}" class="price-rm-img btn btn-sm btn-secondary full" type="submit">Remove</button>
-            </div>
+            <form action="/admin/services/{{ service['id'] }}/images/remove" method="POST">
+              <input type="hidden" value="{{ image }}" name="image">
+              <img src="/static/images/{{ image }}" class="img-thumbnail" title="{{ image }}"/>
+              <div class="d-grid">
+                <button data-img="{{ image }}" class="price-rm-img btn btn-sm btn-secondary full" type="submit">Remove</button>
+              </div>
+            </form>
           </div>
         {% endfor %}
       {% endif %}
@@ -67,94 +73,5 @@
 {% endblock %}
 
 {% block js %}
-  <script>
-    const addService = (payload) => {
-      $.ajax({
-        url: `/admin/services/adding`,
-        type: "POST",
-        data: payload,
-        contentType: false,
-        processData: false
-      }).done((resp) => {
-        location.reload();
-      })
-    };
-
-    const editService = (serviceId, payload) => {
-      $.ajax({
-        url: `/admin/services/${serviceId}/editing`,
-        type: "POST",
-        data: payload,
-        contentType: false,
-        processData: false
-      }).done((resp) => {
-        location.reload();
-      })
-    };
-
-    $(document).ready(() => {
-      // On pag reload, Reset upsert form
-      $('#serviceForm').trigger('reset');
-
-      let rmImages = [];  // This list is for storing images that user removed
-
-      // Adding new row to price
-      $('#addPriceRow').click(() => {
-        $("#priceRows").append(`
-          <div class="input-group mb-1">
-            <input class="price-row form-control" type="text" placeholder="Name..."/>
-            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>
-            <input class="price-row form-control" type="text" placeholder="Price..."/>
-            <button type="button" class="price-del-row btn btn-danger"><i class="fas fa-trash"></i></button>
-          </div>
-        `);
-      });
-
-      // Deleting a price row
-      $(document).on('click', '.price-del-row', (e) => {
-        $(e.currentTarget).parent().remove();
-      });
-
-      // Collect removed images
-      $(document).on('click', '.price-rm-img', (e) => {
-        rmImages.push($(e.currentTarget).data('img'));
-        // hide the selected image
-        $(e.currentTarget).parent('div').parent('div').remove();
-      });
-
-      // handle upsert form submit (add/edit)
-      $("#serviceForm").submit((e) => {
-        e.preventDefault();
-        let mode = `{{ mode }}`;  // This from views, to determine what mode of the form. Adding or Editingß
-
-        // Collect data from the form
-        let payload = new FormData();
-        payload.append("name", $("#name").val());
-        payload.append("description", $("#description").val());
-        for (let i=0; i < $(".price-row").length; i+=2) {
-          payload.append("price", [
-            $($(".price-row")[i]).val(),
-            $($(".price-row")[i+1]).val()
-          ]);
-        }
-        $.each($("#images")[0].files, (i, file) => {
-          payload.append("images", file);
-        });
-
-        // Depends on the mode from the views. it will code add or edit
-        if (mode === 'add') {
-          addService(payload);
-        }
-        else {
-          let serviceId = `{{ service["id"] if service else '' }}`;
-          // Only add rmImages key on editing
-          for (const img of rmImages) {
-            payload.append("rmImages", img);
-          }
-          console.table([...payload]);
-          editService(serviceId, payload);
-        }
-      });
-    });
-  </script>
+  <script src="/static/js/services.js"></script>
 {% endblock %}
