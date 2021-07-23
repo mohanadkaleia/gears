@@ -35,15 +35,21 @@ def insert(shop_id="", name="", description="", price="", images=None):
     return id
 
 
-def update(id="", shop_id="", name="", description="", price="", images=None):
+def update(id, shop_id="", name=None, description=None, price=None, images=None):
     query = tinydb.Query()
-    doc = {
-        "name": name,
-        "slug": slugify(name),
-        "description": description,
-        "price": price,
-        "images": images,
-    }
+    doc = {}
+    if shop_id:
+        doc["shop_id"] = shop_id
+    if name is not None:
+        doc["name"] = name
+        doc["slug"] = slugify(name)
+    if description is not None:
+        doc["description"] = description
+    if price is not None:
+        doc["price"] = price
+    if images is not None:
+        doc["images"] = images
+
     services.update(doc, query.id == id)
     return id
 

@@ -86,11 +86,17 @@ def admin_services_management():
 
 @app.route("/admin/services/save", methods=["POST"])
 def admin_services_save():
-    updated_images = None
+    uploaded_images = None
     if request.files.getlist("images"):
-        updated_images = util.upload_files(
+        uploaded_images = util.upload_files(
             request.files.getlist("images"), app.config["IMAGES_DIR_PATH"]
         )
+    # price info are separated into names and values (prices)
+    # e.g [Wash & Vacuum, Carpet Shampoo], [40, 50]
+    # since this is list so the order are name - value will be matched
+    # to update the price, I combine those list in to a dict with key = name, value = value
+    # zip(names[], values[]) will resolve the above into [(Wash & Vacuum, 40), (Carpet Shampoo, 50)]
+    # finally convert prices into dict => final = {Wash & Vacuum: 40, Carpet Shampoo: 50}
     price = {
         price[0]: price[1]
         for price in list(
@@ -105,7 +111,7 @@ def admin_services_save():
         # get current set of images
         images = set(service["images"])
         # add updated images if any
-        images |= set(updated_images)
+        images |= set(uploaded_images)
 
         services_model.update(
             id=service["id"],
@@ -117,7 +123,7 @@ def admin_services_save():
         flash("Service has been updated")
         return redirect(url_for("admin_services_edit", id=service["id"]))
     except services_model.ErrNotFound:
-        images = updated_images or None
+        images = uploaded_images or None
         services_model.insert(
             name=request.form["name"],
             price=price,
@@ -146,10 +152,7 @@ def admin_services_images_remove(id):
 
         services_model.update(
             id=service["id"],
-            name=service["name"],
-            price=service["price"],
-            description=service["description"],
-            images=service["images"],
+            images=service["images"]
         )
         flash("Removed image")
         return redirect(url_for("admin_services_edit", id=service["id"]))
@@ -169,9 +172,9 @@ def admin_services_edit(id: str):
 
 
 @app.route("/admin/services/<id>/delete", methods=["POST"])
-def admin_services_deleting(id):
+def admin_services_delete(id):
     service = services_model.get(id)
-    # Remove image of this service
+    # Remove image of this service on disk
     util.remove_files(service["images"], app.config["IMAGES_DIR_PATH"])
     services_model.delete(id)
     flash("Service has been deleted")

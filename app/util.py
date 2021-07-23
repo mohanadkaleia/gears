@@ -41,4 +41,7 @@ def remove_files(files: list, target_dir):
     for filepath in files:
         filename = filepath.split("/").pop()
         file = Path(target_dir) / Path(filename)
-        file.unlink()
+        try:
+            file.unlink()
+        except FileNotFoundError:
+            pass
