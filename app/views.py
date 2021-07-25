@@ -6,7 +6,7 @@ import app.models.promos as promos_model
 import app.models.services as services_model
 import app.models.appointments as appintments_model
 
-from app.third_parties import sendemail
+from app.third_parties import sendgrid
 
 config = get_config()
 
@@ -90,11 +90,12 @@ def send_email():
     content = request.form["content"]
 
     try:
-        sendemail.send(subject, from_email=from_email, content=content)
-    except sendemail.ErrNoContentFound:
-        return "error"
+        # FIXME: set the to email in the configurations instead of hard coding it
+        sendgrid.send(from_email, "ms.kaleia@gmail.com", subject, content)
+    except sendgrid.ErrSendEmail:
+        return "oops, my bird just chewed the cable and we can't send your email now 😢.. please try again later "
 
-    return "email sent"
+    return "email sent 🥴"
 
 
 @app.route("/appointment")
