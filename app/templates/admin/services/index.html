@@ -1,0 +1,43 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Services' %}
+
+{% block action_buttons %}
+  <a href="/admin/services/add" type="button" class="btn btn-sm btn-primary">Add New</a>
+{% endblock %}
+
+{% block content %}
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th width="20%" scope="col">Slug</th>
+      <th width="30%" scope="col"></th>
+    </tr>
+    <tbody>
+    {% if services  %}
+      {% for service in services %}
+        <tr>
+          <td>{{ service.name }}</td>
+          <td>{{ service.slug }}</td>
+          <td class="text-end">
+            <a href="/admin/service/{{ service.id }}/details" type="button" class="btn btn-sm btn-secondary">
+              <i class="fas fa-info"></i> Details
+            </a>
+            <a href="/admin/services/{{ service.id }}/edit" type="button" class="btn btn-sm btn-secondary">
+              <i class="fas fa-pencil"></i> Edit
+            </a>
+            <form action="/admin/services/{{ service.id }}/delete" method="POST" class="d-inline">
+              <button data-id="{{ service.id }}" type="submit" class="service-del btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr class="text-center"><td colspan="3">No data</td></tr>
+    {% endif %}
+    </tbody>
+    </thead>
+  </table>
+{% endblock %}

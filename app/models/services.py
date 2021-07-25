@@ -17,10 +17,7 @@ db = tinydb.TinyDB("db.json")
 services = db.table("services")
 
 
-def insert(shop_id="", name="", description="", images=None):
-    if not images:
-        images = []
-
+def insert(shop_id="", name="", description="", price="", images=None):
     # Initialize id with randomly generated string
     id = util.random_id(initial="s")
 
@@ -31,13 +28,29 @@ def insert(shop_id="", name="", description="", images=None):
             "name": name,
             "slug": slugify(name),
             "description": description,
-            "images": images,
+            "price": price,
+            "images": images or [],
         }
     )
+    return id
 
-    # TODO: upload images into disk
-    pass
 
+def update(id, shop_id="", name=None, description=None, price=None, images=None):
+    query = tinydb.Query()
+    doc = {}
+    if shop_id:
+        doc["shop_id"] = shop_id
+    if name is not None:
+        doc["name"] = name
+        doc["slug"] = slugify(name)
+    if description is not None:
+        doc["description"] = description
+    if price is not None:
+        doc["price"] = price
+    if images is not None:
+        doc["images"] = images
+
+    services.update(doc, query.id == id)
     return id
 
 
@@ -48,10 +61,6 @@ def delete(id):
 
 def all():
     results = services.all()
-
-    if not results:
-        raise ErrNotFound("oops.. no service found in the db")
-
     return results
 
 
