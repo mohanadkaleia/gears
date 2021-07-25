@@ -68,7 +68,7 @@ def all():
 
 def get(vehicle_id):
     vehicle = tinydb.Query()
-    result = vehicles.search(vehicle.vehicle_id == vehicle_id)
+    result = vehicles.search(vehicle.id == vehicle_id)
 
     if not result:
         raise ErrVehicleNotFound(f"no vehicle found for the provided id: {vehicle_id}")

@@ -21,7 +21,7 @@ def insert(name="", description="", logo="", phone="", email="", hours=""):
     # TODO: upload the logo as an image
     pass
 
-    shop_id = util.random_id(initial="s")
+    shop_id = util.random_id(initial="S")
     shops.insert(
         {
             "id": shop_id,
