@@ -2,6 +2,6 @@
 *.json
 venv
 __pycache__
-
+.env
 /app/static/images
 /.idea/

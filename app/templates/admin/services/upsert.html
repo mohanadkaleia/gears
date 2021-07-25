@@ -51,9 +51,9 @@
       </form>
     </div>
     <div class="col">
-      {% if service.images %}
+      {% if service and service.images %}
         <label class="form-label">
-          Uploaded Images
+          Uploaded Imagest
         </label>
         {% for image in service.images %}
           <div class="mb-3">
