@@ -2,91 +2,90 @@
 
 
 {% block pre_content %}
-{% for promo in content['promos'] %}
-<div class="alert alert-success d-flex align-items-center alert-dismissible fade show promo" role="alert">
-  <div style="margin-left: 10px">
-    <i class="fas fa-heart"></i>
-    {{promo.code}} <br/> {{promo.description}}
-  </div>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
+  {% for promo in content['promos'] %}
+    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show promo" role="alert">
+      <div style="margin-left: 10px">
+        <i class="fas fa-heart"></i>
+        {{promo.code}} <br/> {{promo.description}}
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
 {% endblock %}
 
 
 {% block content %}
-
-<div class="row">
+  <div class="row">
     {% for service in content['services'] %}
-    <div class="col-md-4 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">
-        <img src="{{ service.cover }}" class="card-img-top" alt="{{ service.title }}" height="225" width="100%">
+      <div class="col-md-4 col-sm-12 col-12">
+        <div class="card mb-4 shadow bg-white rounded">
+          <img src="/static/images/{{ service.images[0] }}" class="card-img-top" alt="{{ service.title }}" height="225" width="100%">
 
-        <div class="card-body">
-          <h1><a href="/{{ service.slug }}.html">{{service.name}}</a></h1>
-          <p class="card-text">
-            {{ service.summary|striptags }}
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <a href="/{{ service.slug }}.html" class="btn btn-sm btn-outline-primary">
-                Details
-              </a>
+          <div class="card-body">
+            <h1><a href="/{{ service.slug }}.html">{{service.name}}</a></h1>
+            <p class="card-text">
+              {{ service.summary|striptags }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a href="{{ url_for('home.services_detail', id=service.id, slug=service.slug) }}" class="btn btn-sm btn-outline-primary">
+                  Details
+                </a>
+              </div>
+              <small class="text-muted">tbd</small>
             </div>
-            <small class="text-muted">tbd</small>
           </div>
-        </div>
 
+        </div>
       </div>
-    </div>
     {% else %}
-    No posts yet!
+      No posts yet!
     {% endfor %}
   </div>
 
 
 
-<div class="row justify-content-md-center">
+  <div class="row justify-content-md-center">
     <h1 class="header-title">Our Inventory</h1>
-</div>
+  </div>
 
-<div class="row">
+  <div class="row">
     {% for vehicle in content['vehicles'][:6] %}
-    <div class="col-md-4 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">
-        <img src="{{ vehicle.cover }}" class="card-img-top" alt="{{ vehicle.slug }}" height="225" width="100%">
+      <div class="col-md-4 col-sm-12 col-12">
+        <div class="card mb-4 shadow bg-white rounded">
+          <img src="{{ vehicle.cover }}" class="card-img-top" alt="{{ vehicle.slug }}" height="225" width="100%">
 
-        <div class="card-body">
-          <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.slug}}</a></h1>
-          <p class="card-text">
-            {{ vehicle.summary|striptags }}
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <a href="/inventory/{{ vehicle.id }}" class="btn btn-sm btn-outline-primary">
-                Details
-              </a>
+          <div class="card-body">
+            <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.slug}}</a></h1>
+            <p class="card-text">
+              {{ vehicle.summary|striptags }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a href="/inventory/{{ vehicle.id }}" class="btn btn-sm btn-outline-primary">
+                  Details
+                </a>
+              </div>
+              <small class="text-muted">tbd</small>
             </div>
-            <small class="text-muted">tbd</small>
           </div>
         </div>
       </div>
-    </div>
 
     {% else %}
-    No posts yet!
+      No posts yet!
     {% endfor %}
-</div>
+  </div>
 
-<div class="row justify-content-md-center">
+  <div class="row justify-content-md-center">
     <div class="">
-        <div class="btn-group">
-            <a href="{{ config.SITEURL }}/inventory" class="btn btn-sm btn-outline-primary">
-            Check out our Inventory
-            </a>
-        </div>
+      <div class="btn-group">
+        <a href="{{ config.SITEURL }}/inventory" class="btn btn-sm btn-outline-primary">
+          Check out our Inventory
+        </a>
+      </div>
     </div>
-</div>
+  </div>
 
 
 {% endblock %}
