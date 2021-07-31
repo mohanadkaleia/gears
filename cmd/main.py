@@ -106,7 +106,7 @@ def create_services(shop_id=None):
                 name=service["name"],
                 description=service["description"],
                 price=service["price"],
-                images=service["images"]
+                images=service["images"],
             )
             services_ids.append(id)
             print(f"Service {service['name']} has been added")
@@ -189,4 +189,4 @@ def main():
 
 
 if __name__ == "__main__":
-    pass
+    main()

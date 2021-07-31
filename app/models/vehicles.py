@@ -1,6 +1,7 @@
 import tinydb
 
 from app import util
+from app.models.db import vehicles
 
 
 class ErrVehicleNotFound(Exception):
@@ -9,11 +10,6 @@ class ErrVehicleNotFound(Exception):
 
 class ErrVehicleAlreadyExisit(Exception):
     pass
-
-
-# DB initializtion
-db = tinydb.TinyDB("db.json")
-vehicles = db.table("vehicles")
 
 
 # CRUD functions
