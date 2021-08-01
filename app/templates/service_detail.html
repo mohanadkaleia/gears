@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <div class="col bg-white p-3">
+      <h1 class="lh-base">{{ service.name }}</h1>
+      <!-- Images -->
+      {% if service.images %}
+      <div id="carouselImages" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          {% for img in service.images %}
+          <button type="button" data-bs-target="#carouselImages" data-bs-slide-to="{{ loop.index0 }}" class="active" aria-current="true" aria-label="Slide {{ loop.index0 }}"></button>
+          {% endfor %}
+        </div>
+        <div class="carousel-inner">
+          {% for img in service.images %}
+          <div class="carousel-item {% if loop.index0 == 0 %} active {% endif %}" data-bs-interval="50000">
+            <img src="/static/images/{{ img }}" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block"></div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      {% endif %}
+      <!-- /Images -->
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-7 bg-white p-3">
+      <h2>Description</h2>
+      <!-- Description -->
+      <p class="lh-base font-monospace">{{ service.description }}</p>
+      <!-- /Description -->
+    </div>
+    <div class="col-5 bg-white p-3">
+      <h2>Pricing</h2>
+      <!-- Prices -->
+      <ul class="list-group">
+        {% for key in service.price %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ key }}
+          <span class="fw-bold">${{ service.price[key] }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <!-- /Prices -->
+    </div>
+  </div>
+{% endblock %}

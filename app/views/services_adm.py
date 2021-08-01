@@ -49,7 +49,7 @@ def admin_services_save():
             images=list(images),
         )
         flash("Service has been updated")
-        return redirect(url_for("admin_services_edit", id=service["id"]))
+        return redirect(url_for("service.admin_services_edit", id=service["id"]))
     except services_model.ErrNotFound:
         images = uploaded_images or None
         services_model.insert(
@@ -59,7 +59,7 @@ def admin_services_save():
             images=images,
         )
         flash("Service has been created")
-        return redirect(url_for("admin_services_add"))
+        return redirect(url_for("service.admin_services_add"))
 
 
 @bp.route("/admin/services/add")
@@ -80,7 +80,7 @@ def admin_services_images_remove(id):
 
         services_model.update(id=service["id"], images=service["images"])
         flash("Removed image")
-        return redirect(url_for("admin_services_edit", id=service["id"]))
+        return redirect(url_for("service.admin_services_edit", id=service["id"]))
     except services_model.ErrNotFound:
         abort(404)
 
@@ -103,4 +103,4 @@ def admin_services_delete(id):
     util.remove_files(service["images"], app.config["IMAGES_DIR_PATH"])
     services_model.delete(id)
     flash("Service has been deleted")
-    return redirect(url_for("admin_services_management"))
+    return redirect(url_for("service.admin_services_management"))
