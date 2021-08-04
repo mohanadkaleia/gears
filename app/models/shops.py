@@ -1,5 +1,6 @@
 import tinydb
 from app import util
+from app.models.db import shops
 
 
 class ErrNotFound(Exception):
@@ -8,10 +9,6 @@ class ErrNotFound(Exception):
 
 class ErrInvalidParameters(Exception):
     pass
-
-
-db = tinydb.TinyDB("db.json")
-shops = db.table("shops")
 
 
 def insert(name="", description="", logo="", phone="", email="", hours=""):

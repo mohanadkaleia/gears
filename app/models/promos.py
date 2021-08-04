@@ -1,6 +1,7 @@
 import tinydb
 
 from app import util
+from app.models.db import promos
 
 
 class ErrNotFound(Exception):
@@ -9,11 +10,6 @@ class ErrNotFound(Exception):
 
 class ErrAlreadyExisit(Exception):
     pass
-
-
-# DB initializtion
-db = tinydb.TinyDB("db.json")
-promos = db.table("promos")
 
 
 # CRUD functions
