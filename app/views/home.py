@@ -58,7 +58,7 @@ def contact():
 
 @bp.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template("admin/../templates/login.html")
 
 
 @bp.route("/send_email", methods=["POST"])

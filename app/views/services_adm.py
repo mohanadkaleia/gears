@@ -1,18 +1,22 @@
+from flask import render_template, request, Blueprint, flash, redirect, abort, url_for
+from flask_login import login_required, current_user
+
+from app import app, util
 import app.models.services as services_model
 
-from flask import render_template, request, Blueprint, flash, redirect, abort, url_for
-from app import app, util
 
 bp = Blueprint("service", __name__)
 
 
 @bp.route("/admin/services")
+@login_required
 def admin_services_management():
     services = services_model.all()
     return render_template("admin/services/index.html", services=services)
 
 
 @bp.route("/admin/services/save", methods=["POST"])
+@login_required
 def admin_services_save():
     uploaded_images = None
     if request.files.getlist("images"):
@@ -63,11 +67,13 @@ def admin_services_save():
 
 
 @bp.route("/admin/services/add")
+@login_required
 def admin_services_add():
     return render_template("admin/services/upsert.html", mode="add")
 
 
 @bp.route("/admin/services/<id>/images/remove", methods=["POST"])
+@login_required
 def admin_services_images_remove(id):
     try:
         # remove images from disk if any
@@ -86,6 +92,7 @@ def admin_services_images_remove(id):
 
 
 @bp.route("/admin/services/<id>/edit")
+@login_required
 def admin_services_edit(id: str):
     try:
         service = services_model.get(id=id)
@@ -97,6 +104,7 @@ def admin_services_edit(id: str):
 
 
 @bp.route("/admin/services/<id>/delete", methods=["POST"])
+@login_required
 def admin_services_delete(id):
     service = services_model.get(id)
     # Remove image of this service on disk

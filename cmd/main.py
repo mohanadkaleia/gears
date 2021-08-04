@@ -7,7 +7,12 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from app.models import services, shops, vehicles, promos, appointments  # noqa
+from app.models import (services,
+                        shops,
+                        vehicles,
+                        promos,
+                        appointments,
+                        users)  # noqa
 
 
 class ErrNotFound(Exception):
@@ -180,12 +185,20 @@ def create_appointments(shop_id, service_id):
     )
 
 
+def create_admin_user():
+    emai = "admin@gear.com"
+    passwd = "testpass"
+    users.insert(emai, passwd)
+    print(f"an admin has created with email {emai} and password {passwd}")
+
+
 def main():
     shop_id = create_shop("DKLube & Detail")
     s_ids = create_services(shop_id=shop_id)
     create_vehicles(shop_id)
     create_promo(shop_id)
     create_appointments(shop_id, s_ids[0])
+    create_admin_user()
 
 
 if __name__ == "__main__":
