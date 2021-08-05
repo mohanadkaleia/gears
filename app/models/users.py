@@ -14,21 +14,21 @@ class ErrInvalidParameters(Exception):
 
 
 class User(UserMixin):
-    def __init__(self, id,  email, password):
+    def __init__(self, id,  username):
         self.id = id
-        self.email = email
-        self.password = password
+        self.username = username
 
     def get_id(self):
+        # This function is requried by Flask-Login
         return self.id
 
 
-def insert(email="", password=""):
+def insert(username="", password=""):
     user_id = util.random_id(initial="U")
     users.insert(
         {
             "id": user_id,
-            "email": email,
+            "username": username,
             "password": generate_password_hash(password, method='sha256'),
         }
     )
@@ -49,19 +49,23 @@ def get(user_id):
     return result[0]
 
 
-def get_by_email(email):
-    if not email:
-        raise ErrInvalidParameters("email parameter is required")
+def get_by_username(username):
+    if not username:
+        raise ErrInvalidParameters("username parameter is required")
 
     user = tinydb.Query()
-    result = users.search(user.email == email)
+    result = users.search(user.username == username)
 
     if not result:
-        raise ErrNotFound(f"no data found for the provided email: {email}")
+        raise ErrNotFound(f"no data found for the provided username: {username}")
 
     return result[0]
 
 
 def load_user(user_id):
+    '''
+        This is a dedicated function for Flask-Login. 
+        To convert user dict into a object since the lib expect the user to be a object
+    '''
     record = get(user_id)
-    return User(record["id"], record["email"], record["password"])
+    return User(record["id"], record["username"], record["password"])

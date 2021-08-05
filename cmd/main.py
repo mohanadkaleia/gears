@@ -186,10 +186,10 @@ def create_appointments(shop_id, service_id):
 
 
 def create_admin_user():
-    emai = "admin@gear.com"
+    username = "admin"
     passwd = "testpass"
-    users.insert(emai, passwd)
-    print(f"an admin has created with email {emai} and password {passwd}")
+    users.insert(username, passwd)
+    print(f"an admin has created with usernamel {username} and password {passwd}")
 
 
 def main():
