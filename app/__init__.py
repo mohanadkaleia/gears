@@ -11,7 +11,7 @@ app.config["IMAGES_DIR_PATH"] = Path.cwd() / Path("app/static/images")
 
 # Install Login Manager
 login_mng = LoginManager()
-login_mng.login_view = 'auth.login'
+login_mng.login_view = "auth.login"
 login_mng.init_app(app)
 
 

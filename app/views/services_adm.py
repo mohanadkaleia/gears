@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint, flash, redirect, abort, url_for
-from flask_login import login_required, current_user
+from flask_login import login_required
 
 from app import app, util
 import app.models.services as services_model

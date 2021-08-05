@@ -14,7 +14,7 @@ class ErrInvalidParameters(Exception):
 
 
 class User(UserMixin):
-    def __init__(self, id,  username):
+    def __init__(self, id, username):
         self.id = id
         self.username = username
 
@@ -29,7 +29,7 @@ def insert(username="", password=""):
         {
             "id": user_id,
             "username": username,
-            "password": generate_password_hash(password, method='sha256'),
+            "password": generate_password_hash(password, method="sha256"),
         }
     )
 
@@ -63,9 +63,9 @@ def get_by_username(username):
 
 
 def load_user(user_id):
-    '''
-        This is a dedicated function for Flask-Login. 
+    """
+        This is a dedicated function for Flask-Login.
         To convert user dict into a object since the lib expect the user to be a object
-    '''
+    """
     record = get(user_id)
     return User(record["id"], record["username"], record["password"])
