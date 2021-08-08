@@ -12,21 +12,22 @@ bp = Blueprint("auth", __name__)
 def login():
     if request.method == "GET":
         return render_template("login.html")
-    else:
-        user = users_model.get_by_username(request.form["username"])
 
-        if not user or not check_password_hash(
-            user["password"], request.form["password"]
-        ):
-            flash("Username or password is incorrect", "error")
-            return render_template("login.html")
+    user = users_model.get_by_username(request.form["username"])
 
-        # if ther user check on the "Remember me" box.
-        # The "rememberme" key will be incluced in request form
-        remember = "rememberme" in request.form
-        login_user(users_model.load_user(user["id"]), remember=remember)
+    if not user or not check_password_hash(
+        user["password"], request.form["password"]
+    ):
+        flash("Username or password is incorrect", "error")
+        return render_template("login.html")
 
-        return redirect(url_for("service.admin_services_management"))
+    # if ther user check on the "Remember me" box.
+    # The "rememberme" key will be incluced in request form
+    remember = "rememberme" in request.form
+    login_user(users_model.load_user(user["id"]), remember=remember)
+
+    # TODO: should have a main admin page instead of redirecting to the services page
+    return redirect(url_for("service.admin_services_management"))
 
 
 @bp.route("/logout")

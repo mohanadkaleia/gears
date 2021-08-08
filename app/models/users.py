@@ -19,12 +19,12 @@ class User(UserMixin):
         self.username = username
 
     def get_id(self):
-        # This function is requried by Flask-Login
+        # This function is required by Flask-Login
         return self.id
 
 
 def insert(username="", password=""):
-    user_id = util.random_id(initial="U")
+    user_id = util.random_id(initial="u")
     users.insert(
         {
             "id": user_id,
@@ -68,4 +68,4 @@ def load_user(user_id):
         To convert user dict into a object since the lib expect the user to be a object
     """
     record = get(user_id)
-    return User(record["id"], record["username"], record["password"])
+    return User(record["id"], record["username"])
