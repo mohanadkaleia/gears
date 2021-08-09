@@ -12,7 +12,9 @@ bp = Blueprint("service", __name__)
 @login_required
 def admin_services_management():
     services = services_model.all()
-    return render_template("admin/services/index.html", services=services)
+    return render_template(
+        "admin/services/index.html", services=services, active_nav="service"
+    )
 
 
 @bp.route("/admin/services/save", methods=["POST"])
@@ -69,7 +71,9 @@ def admin_services_save():
 @bp.route("/admin/services/add")
 @login_required
 def admin_services_add():
-    return render_template("admin/services/upsert.html", mode="add")
+    return render_template(
+        "admin/services/upsert.html", mode="add", active_nav="service"
+    )
 
 
 @bp.route("/admin/services/<id>/images/remove", methods=["POST"])
@@ -97,7 +101,10 @@ def admin_services_edit(id: str):
     try:
         service = services_model.get(id=id)
         return render_template(
-            "admin/services/upsert.html", service=service, mode="edit"
+            "admin/services/upsert.html",
+            service=service,
+            mode="edit",
+            active_nav="service",
         )
     except services_model.ErrNotFound:
         abort(404)

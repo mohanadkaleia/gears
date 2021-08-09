@@ -39,37 +39,37 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">
+            <a class="nav-link {% if active_nav == 'shop' %} active {% endif %}" aria-current="page" href="#">
               <span data-feather="file-text"></span>
               <i class="fal fa-store"></i> Shop
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/admin/services">
+            <a class="nav-link {% if active_nav == 'service' %} active {% endif %}" aria-current="page" href="/admin/services">
               <span data-feather="file-text"></span>
               <i class="fal fa-cart-plus"></i> Services
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/admin/services">
+            <a class="nav-link {% if active_nav == 'vehicle' %} active {% endif %}" aria-current="page" href="/admin/vehicles">
               <span data-feather="file-text"></span>
               <i class="fal fa-car-side"></i> Inventory
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/admin/services">
+            <a class="nav-link {% if active_nav == 'appointments' %} active {% endif %}" aria-current="page" href="/admin/services">
               <span data-feather="file-text"></span>
               <i class="fal fa-calendar-check"></i> Appointments
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/admin/services">
+            <a class="nav-link {% if active_nav == 'promos' %} active {% endif %}" aria-current="page" href="/admin/services">
               <span data-feather="file-text"></span>
               <i class="fal fa-tag"></i> Promos
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/admin/services">
+            <a class="nav-link {% if active_nav == 'users' %} active {% endif %}" aria-current="page" href="/admin/services">
               <span data-feather="file-text"></span>
               <i class="fal fa-users"></i> Users
             </a>

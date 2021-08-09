@@ -105,7 +105,7 @@ def create_services(shop_id=None):
                 shop_id=shop_id,
                 name=service["name"],
                 description=service["description"],
-                price=service["price"],
+                prices=service["price"],
                 images=service["images"],
             )
             services_ids.append(id)
