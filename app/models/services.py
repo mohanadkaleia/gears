@@ -2,6 +2,7 @@ import tinydb
 
 from slugify import slugify
 from app import util
+from app.models.db import services
 
 
 class ErrNotFound(Exception):
@@ -12,12 +13,7 @@ class ErrInvalidParameters(Exception):
     pass
 
 
-# DB initializtion
-db = tinydb.TinyDB("db.json")
-services = db.table("services")
-
-
-def insert(shop_id="", name="", description="", price="", images=None):
+def insert(shop_id="", name="", description="", prices="", images=None):
     # Initialize id with randomly generated string
     id = util.random_id(initial="s")
 
@@ -28,14 +24,14 @@ def insert(shop_id="", name="", description="", price="", images=None):
             "name": name,
             "slug": slugify(name),
             "description": description,
-            "price": price,
+            "prices": prices,
             "images": images or [],
         }
     )
     return id
 
 
-def update(id, shop_id="", name=None, description=None, price=None, images=None):
+def update(id, shop_id="", name=None, description=None, prices=None, images=None):
     query = tinydb.Query()
     doc = {}
 
@@ -49,8 +45,8 @@ def update(id, shop_id="", name=None, description=None, price=None, images=None)
     if description is not None:
         doc["description"] = description
 
-    if price is not None:
-        doc["price"] = price
+    if prices is not None:
+        doc["prices"] = prices
 
     if images is not None:
         doc["images"] = images

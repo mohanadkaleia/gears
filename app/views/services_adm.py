@@ -29,7 +29,7 @@ def admin_services_save():
     # to update the price, I combine those list in to a dict with key = name, value = value
     # zip(names[], values[]) will resolve the above into [(Wash & Vacuum, 40), (Carpet Shampoo, 50)]
     # finally convert prices into dict => final = {Wash & Vacuum: 40, Carpet Shampoo: 50}
-    price = {
+    prices = {
         price[0]: price[1]
         for price in list(
             zip(
@@ -48,7 +48,7 @@ def admin_services_save():
         services_model.update(
             id=service["id"],
             name=request.form["name"],
-            price=price,
+            prices=prices,
             description=request.form["description"],
             images=list(images),
         )
@@ -58,7 +58,7 @@ def admin_services_save():
         images = uploaded_images or None
         services_model.insert(
             name=request.form["name"],
-            price=price,
+            prices=prices,
             description=request.form["description"],
             images=images,
         )

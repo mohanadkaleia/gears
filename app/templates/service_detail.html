@@ -48,13 +48,13 @@
       <!-- /Description -->
     </div>
     <div class="col-5 bg-white p-3">
-      <h2>Pricing</h2>
-      <!-- Prices -->
+      <h2>Prices</h2>
+      <!-- prices -->
       <ul class="list-group">
-        {% for key in service.price %}
+        {% for key in service.prices %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
           {{ key }}
-          <span class="fw-bold">${{ service.price[key] }}</span>
+          <span class="fw-bold">${{ service.prices[key] }}</span>
         </li>
         {% endfor %}
       </ul>
