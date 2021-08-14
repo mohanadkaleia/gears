@@ -8,6 +8,7 @@ import app.models.services as services_model
 bp = Blueprint("service", __name__)
 
 
+@bp.route("/admin")
 @bp.route("/admin/services")
 @login_required
 def admin_services_management():
