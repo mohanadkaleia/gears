@@ -47,6 +47,8 @@ def admin_vehicles_save():
             transmission=request.form["transmission"],
             exterior=request.form["exterior"],
             interior=request.form["interior"],
+            odometer=request.form["odometer"],
+            price=request.form["price"],
             description=request.form["description"],
             images=list(images),
         )
@@ -67,6 +69,8 @@ def admin_vehicles_save():
             transmission=request.form["transmission"],
             exterior=request.form["exterior"],
             interior=request.form["interior"],
+            odometer=request.form["odometer"],
+            price=request.form["price"],
             description=request.form["description"],
             images=images,
         )

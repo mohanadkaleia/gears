@@ -135,7 +135,7 @@ def create_vehicles(shop_id):
             make=makes[x],
             model=models[x],
             year="2015",
-            price="10000",
+            price=10000,
             title="clean",
             condition="good",
             description="nice car",
@@ -184,7 +184,7 @@ def create_admin_user():
     username = "admin"
     passwd = "testpass"
     users.insert(username, passwd)
-    print(f"an admin has created with usernamel {username} and password {passwd}")
+    print(f"an admin has created with username {username} and password {passwd}")
 
 
 def main():

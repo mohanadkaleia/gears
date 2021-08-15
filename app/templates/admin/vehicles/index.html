@@ -9,9 +9,12 @@
   <table class="table table-hover table-bordered">
     <thead>
       <tr>
-        <th scope="col">id</th>
-        <th scope="col">title</th>
-        <th scope="col">description</th>
+        <th width="5%" scope="col">id</th>
+        <th scope="col">make/model</th>
+        <th width="10%" scope="col">year</th>
+        <th width="10%" scope="col">odometer</th>
+        <th width="10%" scope="col">price</th>
+        <th width="10%" scope="col">title</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -20,8 +23,11 @@
       {% for vehicle in vehicles %}
         <tr>
           <td class="align-middle"><b>{{ vehicle.id }}</b></td>
+          <td class="align-middle">{{ vehicle.make }}/{{ vehicle.model }}</td>
+          <td class="align-middle">{{ vehicle.year }}</td>
+          <td class="align-middle">{{ vehicle.odometer }}</td>
+          <td class="align-middle">{{ vehicle.price }}</td>
           <td style="white-space: nowrap;" class="align-middle">{{ vehicle.title }}</td>
-          <td class="align-middle">{{ vehicle.description | truncate(255, True) }}</td>
           <td class="text-end align-middle" style="width: 1%;white-space: nowrap;">
             <a href="/admin/vehicles/{{ vehicle.id }}/details" type="button" class="btn btn-sm btn-primary">
               <i class="fas fa-info"></i> Details

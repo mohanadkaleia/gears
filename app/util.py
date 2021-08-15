@@ -31,6 +31,9 @@ def upload_files(files, target_dir):
         if not image:
             continue
         filename = secure_filename(image.filename)
+        filename = (
+            random_id("i") + "_" + filename
+        )  # Add a random id + initial letter to make it unique
         filepath = Path(target_dir) / Path(filename)
         image.save(filepath)
         uploaded_files.append(filename)

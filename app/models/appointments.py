@@ -15,7 +15,7 @@ class ErrNotFound(Exception):
 def insert(shop_id, service_id, timeslot, name, email, vehicle, description):
 
     if timeslot <= datetime.datetime.today() - datetime.timedelta(1):
-        raise ErrInvalidParameters("can;t schedule an appointment in the past")
+        raise ErrInvalidParameters("can't schedule an appointment in the past")
 
     # TODO: check for availability for the provided timeslot
     pass

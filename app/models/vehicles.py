@@ -30,6 +30,8 @@ def insert(
     transmission="",
     exterior="",
     interior="",
+    price="",
+    odometer="",
     description="",
     images=None,
 ):
@@ -52,6 +54,8 @@ def insert(
             "transmission": transmission,
             "exterior": exterior,
             "interior": interior,
+            "odometer": odometer,
+            "price": price,
             "description": description,
             "images": images or [],
         }
@@ -74,6 +78,8 @@ def update(
     transmission=None,
     exterior=None,
     interior=None,
+    price=None,
+    odometer=None,
     description=None,
     images=None,
 ):
@@ -118,6 +124,12 @@ def update(
 
     if interior is not None:
         doc["interior"] = interior
+
+    if odometer is not None:
+        doc["odometer"] = odometer
+
+    if price is not None:
+        doc["price"] = price
 
     if description is not None:
         doc["description"] = description
