@@ -4,7 +4,11 @@ from app import util
 from app.models.db import vehicles
 
 
-class ErrVehicleNotFound(Exception):
+class ErrNotFound(Exception):
+    pass
+
+
+class ErrInvalidParameters(Exception):
     pass
 
 
@@ -12,65 +16,146 @@ class ErrVehicleAlreadyExisit(Exception):
     pass
 
 
-# CRUD functions
 def insert(
-    shop_id=None,
+    shop_id="",
     make="",
     model="",
     year="",
-    price="",
+    trim="",
+    engine="",
     title="",
     condition="",
+    drive="",
+    fuel="",
+    transmission="",
+    exterior="",
+    interior="",
+    price="",
+    odometer="",
     description="",
     images=None,
 ):
-    # TODO: validate the input data
-    pass
-
-    vehicle_id = util.random_id(initial="v")
-
-    if not images:
-        images = []
+    # Initialize id with randomly generated string
+    id = util.random_id(initial="v")
 
     vehicles.insert(
         {
-            "id": vehicle_id,
+            "id": id,
             "shop_id": shop_id,
             "make": make,
             "model": model,
             "year": year,
-            "price": price,
+            "trim": trim,
+            "engine": engine,
             "title": title,
             "condition": condition,
+            "drive": drive,
+            "fuel": fuel,
+            "transmission": transmission,
+            "exterior": exterior,
+            "interior": interior,
+            "odometer": odometer,
+            "price": price,
             "description": description,
-            "images": images,
+            "images": images or [],
         }
     )
-
-    # TODO: Upload images into disk
-    pass
-
-    return vehicle_id
+    return id
 
 
-def delete(vehicle_id):
+def update(
+    id,
+    shop_id=None,
+    make=None,
+    model=None,
+    year=None,
+    trim=None,
+    engine=None,
+    title=None,
+    condition=None,
+    drive=None,
+    fuel=None,
+    transmission=None,
+    exterior=None,
+    interior=None,
+    price=None,
+    odometer=None,
+    description=None,
+    images=None,
+):
     query = tinydb.Query()
-    vehicles.remove(query.id == vehicle_id)
+
+    doc = {}
+    if shop_id:
+        doc["shop_id"] = shop_id
+
+    if make:
+        doc["make"] = make
+
+    if model is not None:
+        doc["model"] = model
+
+    if year is not None:
+        doc["year"] = year
+
+    if trim is not None:
+        doc["trim"] = trim
+
+    if engine is not None:
+        doc["engine"] = engine
+
+    if title is not None:
+        doc["title"] = title
+
+    if condition is not None:
+        doc["condition"] = condition
+
+    if drive is not None:
+        doc["drive"] = drive
+
+    if fuel is not None:
+        doc["fuel"] = fuel
+
+    if transmission is not None:
+        doc["transmission"] = transmission
+
+    if exterior is not None:
+        doc["exterior"] = exterior
+
+    if interior is not None:
+        doc["interior"] = interior
+
+    if odometer is not None:
+        doc["odometer"] = odometer
+
+    if price is not None:
+        doc["price"] = price
+
+    if description is not None:
+        doc["description"] = description
+
+    if images is not None:
+        doc["images"] = images
+
+    vehicles.update(doc, query.id == id)
+    return id
+
+
+def delete(id):
+    query = tinydb.Query()
+    vehicles.remove(query.id == id)
 
 
 def all():
-    return vehicles.all()
+    results = vehicles.all()
+    return results
 
 
-def get(vehicle_id):
-    vehicle = tinydb.Query()
-    result = vehicles.search(vehicle.id == vehicle_id)
+def get(id):
+    service = tinydb.Query()
+    result = vehicles.search(service.id == id)
 
     if not result:
-        raise ErrVehicleNotFound(f"no vehicle found for the provided id: {vehicle_id}")
+        raise ErrNotFound(f"no service found for the provided id: {id}")
 
     return result[0]
-
-
-def find(make="", model="", year=""):
-    pass

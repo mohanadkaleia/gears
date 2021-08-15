@@ -15,9 +15,7 @@ def login():
 
     user = users_model.get_by_username(request.form["username"])
 
-    if not user or not check_password_hash(
-        user["password"], request.form["password"]
-    ):
+    if not user or not check_password_hash(user["password"], request.form["password"]):
         flash("Username or password is incorrect", "error")
         return render_template("login.html")
 

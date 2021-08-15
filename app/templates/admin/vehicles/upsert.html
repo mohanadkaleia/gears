@@ -1,0 +1,152 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Vehicles' %}
+
+{% block action_buttons %}
+  <a href="/admin/vehicles" class="btn btn-link">Back to list</a>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-8">
+      <form id="vehicleForm" action="/admin/vehicles/save" method="POST" enctype="multipart/form-data" class="row">
+        {% if vehicle %}
+          <input name="vehicle_id" type="hidden" value="{{ vehicle['id'] }}"/>
+        {% endif %}
+
+        <div class="mb-3 col-4">
+          <label class="form-label">Make</label>
+          <input id="make" type="text" class="form-control" name="make" value="{{ vehicle['make'] if vehicle else '' }}" autofocus>
+        </div>
+
+        <div class="mb-3 col-4">
+          <label class="form-label">Model</label>
+          <input id="model" type="text" class="form-control" name="model" value="{{ vehicle['model'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-4">
+          <label class="form-label">Year</label>
+          <input id="year" type="text" class="form-control" name="year" value="{{ vehicle['year'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Trim</label>
+          <input id="trim" type="text" class="form-control" name="trim" value="{{ vehicle['trim'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Engine</label>
+          <input id="engine" type="text" class="form-control" name="engine" value="{{ vehicle['engine'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Title</label>
+          <input id="title" type="text" class="form-control" name="title" value="{{ vehicle['title'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Condition</label>
+          <input id="condition" type="text" class="form-control" name="condition" value="{{ vehicle['condition'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Drive</label>
+          <select id="drive" name="drive" class="form-control">
+            <option value="awd" {% if vehicle and vehicle["drive"] == 'awd' %} selected {% else %} selected {% endif %}>
+              AWD
+            </option>
+            <option value="fwd" {% if vehicle and vehicle["drive"] == 'fwd' %} selected {% endif %}>
+              FWD
+            </option>
+            <option value="rwd" {% if vehicle and vehicle["drive"] == 'rwd' %} selected {% endif %}>
+              RWD
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Fuel</label>
+          <select id="fuel" name="fuel" class="form-control">
+            <option value="disel" {% if vehicle and vehicle["fuel"] == 'disel' %} selected {% endif %}>
+              Disel
+            </option>
+            <option value="electric" {% if vehicle and vehicle["fuel"] == 'electric' %} selected {% else %} selected {% endif %}>
+              Electric
+            </option>
+            <option value="gas" {% if vehicle and vehicle["fuel"] == 'gas' %} selected {% endif %}>
+              Gas
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Transmission</label>
+          <select id="transmission" name="transmission" class="form-control">
+            <option value="automatic" {% if vehicle and vehicle["transmission"] == 'automatic' %} selected {% endif %}>
+              Automatic
+            </option>
+            <option value="manual" {% if vehicle and vehicle["transmission"] == 'fwd' %} selected {% endif %}>
+              Manual
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Exterior Color</label>
+          <input id="exterior" type="color" class="form-control" name="exterior" value="{{ vehicle['exterior'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Interior Color</label>
+          <input id="interior" type="color" class="form-control" name="interior" value="{{ vehicle['interior'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Odometer</label>
+          <input id="odometer" type="text" class="form-control" name="odometer" value="{{ vehicle['odometer'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Price</label>
+          <input id="price" type="text" class="form-control" name="price" value="{{ vehicle['price'] if vehicle else '' }}">
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Description</label>
+          <textarea id="description" name="description" class="form-control" rows="3">{{ vehicle['description'] if vehicle else '' }}</textarea>
+        </div>
+
+        <div class="mb-3 col-12">
+          <label class="form-label">Images</label>
+          <input name="images" multiple="multiple" class="form-control" type="file" id="images">
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary full" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+      {% if vehicle and vehicle.images %}
+        <label class="form-label">
+          Uploaded Images
+        </label>
+        {% for image in vehicle.images %}
+          <div class="mb-3">
+            <form action="/admin/vehicles/{{ vehicle['id'] }}/images/remove" method="POST">
+              <input type="hidden" value="{{ image }}" name="image">
+              <img src="/static/images/{{ image }}" class="img-thumbnail" title="{{ image }}"/>
+              <div class="d-grid">
+                <button data-img="{{ image }}" class="price-rm-img btn btn-sm btn-secondary full" type="submit">Remove</button>
+              </div>
+            </form>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <br><br>
+{% endblock %}
+
+{% block js %}
+  <script src="/static/js/vehicles.js"></script>
+{% endblock %}

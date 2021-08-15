@@ -1,0 +1,51 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Vehicles' %}
+
+{% block action_buttons %}
+  <a href="/admin/vehicles/add" type="button" class="btn btn-sm btn-primary">Add New</a>
+{% endblock %}
+
+{% block content %}
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th width="5%" scope="col">id</th>
+        <th scope="col">make/model</th>
+        <th width="10%" scope="col">year</th>
+        <th width="10%" scope="col">odometer</th>
+        <th width="10%" scope="col">price</th>
+        <th width="10%" scope="col">title</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% if vehicles  %}
+      {% for vehicle in vehicles %}
+        <tr>
+          <td class="align-middle"><b>{{ vehicle.id }}</b></td>
+          <td class="align-middle">{{ vehicle.make }}/{{ vehicle.model }}</td>
+          <td class="align-middle">{{ vehicle.year }}</td>
+          <td class="align-middle">{{ vehicle.odometer }}</td>
+          <td class="align-middle">{{ vehicle.price }}</td>
+          <td style="white-space: nowrap;" class="align-middle">{{ vehicle.title }}</td>
+          <td class="text-end align-middle" style="width: 1%;white-space: nowrap;">
+            <a href="/admin/vehicles/{{ vehicle.id }}/details" type="button" class="btn btn-sm btn-primary">
+              <i class="fas fa-info"></i> Details
+            </a>
+            <a href="/admin/vehicles/{{ vehicle.id }}/edit" type="button" class="btn btn-sm btn-warning">
+              <i class="fas fa-pencil"></i> Edit
+            </a>
+            <form action="/admin/vehicles/{{ vehicle.id }}/delete" method="POST" class="d-inline">
+              <button data-id="{{ vehicle.id }}" type="submit" class="vehicle-del btn btn-sm btn-danger">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr class="text-center"><td colspan="4">No data</td></tr>
+    {% endif %}
+    </tbody>
+  </table>
+{% endblock %}
