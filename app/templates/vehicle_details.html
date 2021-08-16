@@ -1,77 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{vehicle.make + ' ' + vehicle.model}}
+      </li>
+    </ol>
+  </nav>
 
-<div class="row justify-content-md-center">
-  <h1 class="header-title">{{ vehicle.make + ' ' + vehicle.model}}</h1>
-</div>
+  <div class="row justify-content-md-center">
+    <h1 class="header-title">{{ vehicle.make + ' ' + vehicle.model}}</h1>
+  </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">
-        <div class="card-body">
-          <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.make + ' ' + vehicle.model}}</a></h1>
-          <p class="card-text">
-            Make: {{ vehicle.make}}
-            <br/>
-            Model: {{ vehicle.model}}
-            <br/>
-            Year: {{ vehicle.year}}
-            <br/>
-            Price: {{ vehicle.price}}
-            <br/>
-            Title: {{ vehicle.title}}
-            <br/>
-            Condition: {{ vehicle.condition}}
-            <br/>
-            Description:
-            {{ vehicle.summary|striptags }}
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <a href="/{{ vehicle.slug }}.html" class="btn btn-sm btn-outline-primary">
-                Details
-              </a>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-12">
+        <div class="card mb-4 shadow bg-white rounded">
+          <div class="card-body">
+            <h1 class="card-title">
+              <a href="/inventory/{{ vehicle.id }}.html">{{vehicle.make + ' ' + vehicle.model}}</a>
+            </h1>
+
+            <div class="row card-text">
+              <div class="col-6">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><b>Make</b>: {{ vehicle.make }}</li>
+                  <li class="list-group-item"><b>Model</b>: {{ vehicle.model }}</li>
+                  <li class="list-group-item"><b>Year</b>: {{ vehicle.year }}</li>
+                  <li class="list-group-item"><b>Trim</b>: {{ vehicle.trim }}</li>
+                  <li class="list-group-item"><b>Engine</b>: {{ vehicle.engine }}</li>
+                  <li class="list-group-item"><b>Drive</b>: {{ vehicle.drive }}</li>
+                  <li class="list-group-item"><b>Fuel</b>: {{ vehicle.fuel }}</li>
+                  <li class="list-group-item"></li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><b>Transmission</b>: {{ vehicle.transmission }}</li>
+                  <li class="list-group-item"><b>Exterior</b>:
+                    <span class="badge rounded-pill" style="background: {{ vehicle.exterior }}; padding: 0 80px 10px 35px">{{ ' ' }}</span>
+                  </li>
+                  <li class="list-group-item"><b>Interior</b>:
+                    <span class="badge rounded-pill" style="background: {{ vehicle.interior }}; padding: 0 80px 10px 35px">{{ ' ' }}</span>
+                  </li>
+                  <li class="list-group-item"><b>Odometer</b>: {{ vehicle.odometer }}</li>
+                  <li class="list-group-item"><b>Price</b>: {{ vehicle.price }}</li>
+                  <li class="list-group-item"><b>Title</b>: {{ vehicle.title }}</li>
+                  <li class="list-group-item"><b>Condition</b>: {{ vehicle.condition }}</li>
+                  <li class="list-group-item"></li>
+                </ul>
+              </div>
             </div>
-            <small class="text-muted">tbd</small>
+            <div class="row">
+              <div class="col-12">
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item"><b>Description</b>: {{ vehicle.description|striptags }}</li>
+                  <li class="list-group-item"></li>
+                </ul>
+              </div>
+            </div>
+            <!-- <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <a href="/{{ vehicle.slug }}.html" class="btn btn-sm btn-outline-primary">
+                  Details
+                </a>
+              </div>
+              <small class="text-muted"></small>
+            </div>-->
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
-</div>
 
-<div class="container">
-  <div class="row">
-    <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid rounded">
-    </a>
+  <div class="container">
+    <div class="row">
+      {% for image in vehicle.images %}
+        <a href="/static/images/{{ image }}" class="col-4" target="_blank">
+          <img src="/static/images/{{ image }}" class="img-fluid rounded img-thumbnail" alt="{{ image }}"/>
+        </a>
+      {% endfor %}
+    </div>
   </div>
-  <div class="row">
-    <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid rounded">
-    </a>
-  </div>
-</div>
 
-<script>
-  $(document).on("click", '[data-toggle="lightbox"]', function(event) {
-    event.preventDefault();
-    $(this).ekkoLightbox();
-  });
-</script>
+  <script>
+    //$(document).on("click", '[data-toggle="lightbox"]', function(event) {
+    //  event.preventDefault();
+    //  $(this).ekkoLightbox();
+    //});
+  </script>
 {% endblock %}

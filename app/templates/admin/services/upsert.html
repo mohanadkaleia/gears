@@ -35,7 +35,7 @@
             Add Price
           </button>
           {% if service  %}
-            {% for name in service["items"] %}
+            {% for name in service["prices"] %}
               <div class="input-group mb-1">
                 <input name="price_names[]" value="{{ name }}" class="price-row form-control" type="text" placeholder="Name..."/>
                 <span class="input-group-text" id="addon-wrapping"><i class="fas fa-dollar-sign"></i></span>

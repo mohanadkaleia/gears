@@ -31,7 +31,7 @@ def services_detail(id, slug):
     if service["slug"] != slug:
         abort(404)
 
-    return render_template("service_detail.html", service=service)
+    return render_template("service_details.html", service=service)
 
 
 @bp.route("/inventory")
@@ -46,7 +46,7 @@ def get_vehicle(id):
         # Search for the vehicle and render it
         data = vehicles_model.get(id)
         return render_template("vehicle_details.html", config=config, vehicle=data)
-    except vehicles_model.ErrVehicleNotFound:
+    except vehicles_model.ErrNotFound:
         # TODO: return a 404 page
         return "oops not vehicle found"
 
