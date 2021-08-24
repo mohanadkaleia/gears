@@ -53,12 +53,12 @@
     {% for vehicle in content['vehicles'][:6] %}
       <div class="col-md-4 col-sm-12 col-12">
         <div class="card mb-4 shadow bg-white rounded">
-          <img src="{{ vehicle.cover }}" class="card-img-top" alt="{{ vehicle.slug }}" height="225" width="100%">
+          <img src="/static/images/{{ vehicle.images[0] }}" class="card-img-top" alt="{{ vehicle.id }}" height="225" width="100%">
 
           <div class="card-body">
-            <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.slug}}</a></h1>
+            <h1><a href="/inventory/{{ vehicle.id }}">{{vehicle.id}}</a></h1>
             <p class="card-text">
-              {{ vehicle.summary|striptags }}
+              {{ vehicle.description|truncate(255, True) }}
             </p>
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group">
@@ -66,12 +66,11 @@
                   Details
                 </a>
               </div>
-              <small class="text-muted">tbd</small>
+              <small class="text-muted"></small>
             </div>
           </div>
         </div>
       </div>
-
     {% else %}
       No posts yet!
     {% endfor %}
