@@ -1,77 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="row justify-content-md-center">
-  <h1 class="header-title">{{ vehicle.make + ' ' + vehicle.model}}</h1>
-</div>
+  <div class="row justify-content-md-center">
+    <h1 class="header-title">{{ vehicle.make + ' ' + vehicle.model}}</h1>
+  </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-12 col-sm-12 col-12">
-      <div class="card mb-4 shadow bg-white rounded">
-        <div class="card-body">
-          <h1><a href="/{{ vehicle.slug }}.html">{{vehicle.make + ' ' + vehicle.model}}</a></h1>
-          <p class="card-text">
-            Make: {{ vehicle.make}}
-            <br/>
-            Model: {{ vehicle.model}}
-            <br/>
-            Year: {{ vehicle.year}}
-            <br/>
-            Price: {{ vehicle.price}}
-            <br/>
-            Title: {{ vehicle.title}}
-            <br/>
-            Condition: {{ vehicle.condition}}
-            <br/>
-            Description:
-            {{ vehicle.summary|striptags }}
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <a href="/{{ vehicle.slug }}.html" class="btn btn-sm btn-outline-primary">
-                Details
-              </a>
-            </div>
-            <small class="text-muted">tbd</small>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-12">
+        <div class="card mb-4 shadow bg-white rounded">
+          <div class="card-body">
+            <h1><a href="/inventory/{{ vehicle.id }}">{{vehicle.make + ' ' + vehicle.model}}</a></h1>
+            <p class="card-text">
+              Make: {{ vehicle.make}}
+              <br/>
+              Model: {{ vehicle.model}}
+              <br/>
+              Year: {{ vehicle.year}}
+              <br/>
+              Price: {{ vehicle.price}}
+              <br/>
+              Title: {{ vehicle.title}}
+              <br/>
+              Condition: {{ vehicle.condition}}
+              <br/>
+              Description:
+              {{ vehicle.description|striptags }}
+            </p>
           </div>
         </div>
       </div>
     </div>
-
-
   </div>
-</div>
 
-<div class="container">
-  <div class="row">
-    <a href="https://unsplash.it/1200/768.jpg?image=251" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=251" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=252" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=252" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=253" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=253" class="img-fluid rounded">
-    </a>
+  <div class="container">
+    <div class="row">
+      {% for image in vehicle.images %}
+        <a href="/static/images/{{ image }}" class="col-4">
+          <img src="/static/images/{{ image }}" class="img-fluid rounded" alt="{{ image }}">
+        </a>
+      {% endfor %}
+    </div>
   </div>
-  <div class="row">
-    <a href="https://unsplash.it/1200/768.jpg?image=254" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=254" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=255" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=255" class="img-fluid rounded">
-    </a>
-    <a href="https://unsplash.it/1200/768.jpg?image=256" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-      <img src="https://unsplash.it/600.jpg?image=256" class="img-fluid rounded">
-    </a>
-  </div>
-</div>
-
-<script>
-  $(document).on("click", '[data-toggle="lightbox"]', function(event) {
-    event.preventDefault();
-    $(this).ekkoLightbox();
-  });
-</script>
 {% endblock %}
