@@ -26,7 +26,7 @@ def index():
 @bp.route("/services/<id>")
 def services_detail(id):
     service = services_model.get(id)
-    return render_template("service_detail.html", service=service)
+    return render_template("service_detail.html", service=service, config=config)
 
 
 @bp.route("/inventory")
