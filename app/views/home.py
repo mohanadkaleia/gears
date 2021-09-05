@@ -1,5 +1,5 @@
 from app.config import get_config
-from flask import render_template, request, Blueprint, abort
+from flask import render_template, request, Blueprint
 
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
@@ -23,14 +23,9 @@ def index():
     return render_template("index.html", config=config, content=content)
 
 
-@bp.route("/services/<id>/<slug>")
-def services_detail(id, slug):
+@bp.route("/services/<id>")
+def services_detail(id):
     service = services_model.get(id)
-
-    # if the service from db not match with the slug then return 404 page (not 100% necessary)
-    if service["slug"] != slug:
-        abort(404)
-
     return render_template("service_detail.html", service=service)
 
 

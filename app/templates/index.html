@@ -22,13 +22,13 @@
           <img src="/static/images/{{ service.images[0] }}" class="card-img-top" alt="{{ service.name }}" height="225" width="100%">
 
           <div class="card-body">
-            <h1><a href="{{ url_for('home.services_detail', id=service.id, slug=service.slug) }}">{{service.name}}</a></h1>
+            <h1><a href="{{ url_for('home.services_detail', id=service.id) }}">{{service.name}}</a></h1>
             <p class="card-text">
               {{ service.description|truncate(255, True) }}
             </p>
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group">
-                <a href="{{ url_for('home.services_detail', id=service.id, slug=service.slug) }}" class="btn btn-sm btn-outline-primary">
+                <a href="{{ url_for('home.services_detail', id=service.id) }}" class="btn btn-sm btn-outline-primary">
                   Details
                 </a>
               </div>

@@ -23,7 +23,7 @@
           <td style="white-space: nowrap;" class="align-middle">{{ service.name }}</td>
           <td class="align-middle">{{ service.description | truncate(255, True) }}</td>
           <td class="text-end align-middle" style="width: 1%;white-space: nowrap;">
-            <a href="/admin/services/{{ service.id }}/details" type="button" class="btn btn-sm btn-primary">
+            <a href="/services/{{ service.id }}" type="button" class="btn btn-sm btn-primary">
               <i class="fas fa-info"></i> Details
             </a>
             <a href="/admin/services/{{ service.id }}/edit" type="button" class="btn btn-sm btn-warning">
