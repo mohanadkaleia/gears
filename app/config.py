@@ -14,7 +14,7 @@ dev = {
 
 # Production env variables
 prod = {
-    "SITEURL": "http://localhost:5000",
+    "SITEURL": "http://dklube.com",
     "SITENAME": "DKLube & Detail",
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
 }
