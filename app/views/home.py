@@ -41,7 +41,7 @@ def get_vehicle(id):
         # Search for the vehicle and render it
         data = vehicles_model.get(id)
         return render_template("vehicle_details.html", config=config, vehicle=data)
-    except vehicles_model.ErrVehicleNotFound:
+    except vehicles_model.ErrNotFound:
         # TODO: return a 404 page
         return "oops not vehicle found"
 
