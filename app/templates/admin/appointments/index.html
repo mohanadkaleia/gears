@@ -2,18 +2,14 @@
 {% set page_title='Appointments' %}
 
 {% block action_buttons %}
-
-{% endblock %}
-
-{% block content %}
-  <!-- Button trigger modal -->
   <button id="addAppointment" type="button" class="btn btn-primary">
     Add New
   </button>
-  <br/>
+{% endblock %}
+
+{% block content %}
   <div id='calendar'></div>
   {% include 'admin/appointments/upsert_modal.html' %}
-  {% include 'admin/appointments/detail_modal.html' %}
 {% endblock %}
 
 {% block js %}

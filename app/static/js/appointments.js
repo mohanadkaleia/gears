@@ -4,11 +4,18 @@ appointment.data = [];
 
 $(document).ready(() => {
   console.log(":>",appointment.data)
-
+  
+  $("#saveAppt").click((e) => {
+    $("#apptForm").submit();
+  });
+  
   $("#addAppointment").click((e) => {
     (async () => {
-      const resp = await fetch("/admin/appointments/view/upsert");
-      const formContent = await resp.text();
+      const formContent = await $.ajax({
+        url: "/admin/appointments/view/upsert",
+        type: "POST"
+      });
+      $("#appointmentUpsertModalLabel").text("New Appointment");
       $("#appointmentUpsertModal").find(".modal-body").html(formContent);
       $("#appointmentUpsertModal").modal('show');
     })();
@@ -20,10 +27,17 @@ $(document).ready(() => {
     timeZone: 'UTC',
     events: appointment.data,
     eventClick: function(info) {
-      $("#appointmentDetailModelLabel").text(info.event.title);
-      $("#appointmentDetailModel").modal('show');
-      $("#appointmentDetailDel").attr('action', `/admin/appointments/${info.event.id}/delete`);
-  
+      (async () => {
+        const formContent = await $.ajax({
+          url: "/admin/appointments/view/upsert",
+          type: "POST",
+          data: {id: info.event.id}
+        });
+        $("#appointmentUpsertModalLabel").text("Edit Appointment");
+        $("#appointmentUpsertModal").find(".modal-body").html(formContent);
+        $("#appointmentUpsertDelForm").attr('action', `/admin/appointments/${info.event.id}/delete`)
+        $("#appointmentUpsertModal").modal('show');
+      })();
       // change the border color just for fun
       // info.el.style.borderColor = 'red';
     },

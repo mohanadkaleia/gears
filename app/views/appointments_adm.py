@@ -33,12 +33,18 @@ def admin_appointments_management():
     )
 
 
-@bp.route("/admin/appointments/view/upsert")
+@bp.route("/admin/appointments/view/upsert", methods=["POST"])
 def admin_render_upsert_form():
     shops = shop_model.all()
     services = service_model.all()
+    try:
+        appt = appt_model.get(request.form.get("id"))
+        appt.timeslot = str(appt["timeslot"].date())
+    except appt_model.ErrNotFound:
+        appt = None
     return render_template(
         'admin/appointments/upsert_form.html',
+        appt=appt,
         shops=shops,
         services=services
     )
@@ -48,10 +54,18 @@ def admin_render_upsert_form():
 @login_required
 def admin_save_appointment():
     try:
-        appt = appt_model.get(request.form.get("id"))
-        # TODO: Confirm there will be a edit feature for Appointment
+        appt_model.get(request.form.get("id"))
+        appt_model.update(
+            id=request.form["id"],
+            shop_id=request.form.get("shop"),
+            service_id=request.form.get("service"),
+            timeslot=datetime.strptime(request.form.get('timeslot'), "%Y-%m-%d"),
+            vehicle=request.form.get('vehicle'),
+            name=request.form.get('name'),
+            email=request.form.get('email'),
+            description=request.form.get('description')
+        )
         flash("Appointment has been updated")
-        return redirect(url_for('appointments.a'))
     except appt_model.ErrNotFound:
         appt_model.insert(
             shop_id=request.form.get("shop"),
@@ -69,8 +83,9 @@ def admin_save_appointment():
         return redirect(url_for('appointments.admin_appointments_management'))
 
 
-@bp.route("/admin/appointments/<id>/delete")
+@bp.route("/admin/appointments/<id>/delete", methods=["POST"])
 @login_required
 def admin_delete_appointment(id):
+    appt_model.delete(id)
     flash(f"Appointment {id} deleted", "info")
     return redirect(url_for('appointments.admin_appointments_management'))
