@@ -4,11 +4,11 @@ appointment.data = [];
 
 $(document).ready(() => {
   console.log(":>",appointment.data)
-  
+
   $("#saveAppt").click((e) => {
     $("#apptForm").submit();
   });
-  
+
   $("#addAppointment").click((e) => {
     (async () => {
       const formContent = await $.ajax({
@@ -20,7 +20,7 @@ $(document).ready(() => {
       $("#appointmentUpsertModal").modal('show');
     })();
   });
-  
+
   var calendarEl = document.getElementById('calendar');
   var calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',

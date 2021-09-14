@@ -39,8 +39,16 @@ def insert(shop_id, service_id, timeslot, name, email, vehicle, description):
     return id
 
 
-def update(id, shop_id=None, service_id=None, timeslot=None, name=None,
-           email=None, vehicle=None, description=None):
+def update(
+    id,
+    shop_id=None,
+    service_id=None,
+    timeslot=None,
+    name=None,
+    email=None,
+    vehicle=None,
+    description=None,
+):
     query = tinydb.Query()
     doc = {}
 
