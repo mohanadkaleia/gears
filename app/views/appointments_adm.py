@@ -37,6 +37,8 @@ def admin_appointments_management():
 
 @bp.route("/admin/appointments/view/upsert", methods=["POST"])
 def admin_render_upsert_form():
+    # get all shops and services records to populate
+    # shop and service dropdowns options in upsert_form template
     shops = shop_model.all()
     services = service_model.all()
     try:
@@ -45,7 +47,11 @@ def admin_render_upsert_form():
     except appt_model.ErrNotFound:
         appt = None
     return render_template(
-        "admin/appointments/upsert_form.html", appt=appt, shops=shops, services=services
+        "admin/appointments/upsert_form.html",
+        appt=appt,
+        shops=shops,
+        services=services,
+        selected_date=request.form.get("selected_date", "")
     )
 
 
@@ -54,28 +60,34 @@ def admin_render_upsert_form():
 def admin_save_appointment():
     try:
         appt_model.get(request.form.get("id"))
-        appt_model.update(
-            id=request.form["id"],
-            shop_id=request.form.get("shop"),
-            service_id=request.form.get("service"),
-            timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
-            vehicle=request.form.get("vehicle"),
-            name=request.form.get("name"),
-            email=request.form.get("email"),
-            description=request.form.get("description"),
-        )
-        flash("Appointment has been updated")
+        try:
+            appt_model.update(
+                id=request.form["id"],
+                shop_id=request.form.get("shop"),
+                service_id=request.form.get("service"),
+                timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
+                vehicle=request.form.get("vehicle"),
+                name=request.form.get("name"),
+                email=request.form.get("email"),
+                description=request.form.get("description"),
+            )
+            flash("Appointment has been updated")
+        except appt_model.ErrInvalidParameters as e:
+            flash(str(e))
     except appt_model.ErrNotFound:
-        appt_model.insert(
-            shop_id=request.form.get("shop"),
-            service_id=request.form.get("service"),
-            timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
-            vehicle=request.form.get("vehicle"),
-            name=request.form.get("name"),
-            email=request.form.get("email"),
-            description=request.form.get("description"),
-        )
-        flash("New appointment has been added")
+        try:
+            appt_model.insert(
+                shop_id=request.form.get("shop"),
+                service_id=request.form.get("service"),
+                timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
+                vehicle=request.form.get("vehicle"),
+                name=request.form.get("name"),
+                email=request.form.get("email"),
+                description=request.form.get("description"),
+            )
+            flash("New appointment has been added")
+        except appt_model.ErrInvalidParameters as e:
+            flash(str(e))
     except Exception as e:
         raise e
     finally:
