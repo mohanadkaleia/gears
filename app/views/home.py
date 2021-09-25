@@ -61,10 +61,9 @@ def send_email():
     from_email = request.form["from_email"]
     subject = request.form["subject"]
     content = request.form["content"]
-
+    config = get_config()
     try:
-        # FIXME: set the to email in the configurations instead of hard coding it
-        sendgrid.send(from_email, "ms.kaleia@gmail.com", subject, content)
+        sendgrid.send(from_email, config["TO_EMAIL_ADDRESS"], subject, content)
     except sendgrid.ErrSendEmail:
         return "oops, my bird just chewed the cable and we can't send your email now 😢.. please try again later "
 

@@ -10,6 +10,7 @@ dev = {
     "SITEURL": "http://localhost:5000",
     "SITENAME": "DKLube & Detail",
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
+    "TO_EMAIL_ADDRESS": "ms.kaleia@gmail.com",
 }
 
 # Production env variables
@@ -17,6 +18,7 @@ prod = {
     "SITEURL": "http://dklube.com",
     "SITENAME": "DKLube & Detail",
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
+    "TO_EMAIL_ADDRESS": "dklube63@gmail.com",
 }
 
 
