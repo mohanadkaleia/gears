@@ -1,0 +1,72 @@
+<form id="apptForm" action="/admin/appointments/save" method="POST" enctype="multipart/form-data">
+  {% if appt %}
+    <input type="hidden" name="id" value="{{ appt["id"] }}" />
+  {% endif %}
+  <div class="row">
+    <div class="col-6">
+      <div class="mb-3">
+        <label class="form-label">Shop</label>
+        <select id="shop" name="shop" class="form-control">
+          <option value=""
+            {% if not appt %} selected {% endif %}
+                  hidden>
+            Select a shop...
+          </option>
+          {% for shop in shops %}
+            <option value="{{ shop.id }}"
+              {% if appt and appt["shop_id"] == shop.id %} selected {% endif %}>
+              {{ shop.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Service</label>
+        <select id="service" name="service" class="form-control">
+          <option value=""
+            {% if not appt %} selected {% endif %}
+                  hidden>
+            Select a service...
+          </option>
+          {% for service in services %}
+            <option value="{{ service.id }}"
+              {% if appt and appt["service_id"] == service.id %} selected {% endif %}>
+              {{ service.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Timeslot</label>
+        <input id="timeslot" type="date" class="form-control" name="timeslot"
+               value="{% if appt %}{{ appt.timeslot }}{% else %}{{ selected_date }}{% endif %}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Vehicle</label>
+        <input id="vehicle" type="text" class="form-control" name="vehicle"
+               value="{% if appt %}{{ appt.vehicle }}{% endif %}" />
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input id="name" type="text" class="form-control" name="name"
+               value="{% if appt %}{{ appt.name }}{% endif %}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input id="email" type="email" class="form-control" name="email"
+               value="{% if appt %}{{ appt.email }}{% endif %}" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea id="description" name="description" class="form-control" rows="4">{% if appt %}{{ appt.description }}{% endif %}</textarea>
+      </div>
+    </div>
+  </div>
+</form>

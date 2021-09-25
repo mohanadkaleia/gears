@@ -15,7 +15,7 @@ class ErrNotFound(Exception):
 def insert(shop_id, service_id, timeslot, name, email, vehicle, description):
 
     if timeslot <= datetime.datetime.today() - datetime.timedelta(1):
-        raise ErrInvalidParameters("can't schedule an appointment in the past")
+        raise ErrInvalidParameters("Can't schedule an appointment in the past")
 
     # TODO: check for availability for the provided timeslot
     pass
@@ -36,6 +36,47 @@ def insert(shop_id, service_id, timeslot, name, email, vehicle, description):
         }
     )
 
+    return id
+
+
+def update(
+    id,
+    shop_id=None,
+    service_id=None,
+    timeslot=None,
+    name=None,
+    email=None,
+    vehicle=None,
+    description=None,
+):
+    query = tinydb.Query()
+    doc = {}
+
+    if shop_id is not None:
+        doc["shop_id"] = shop_id
+
+    if service_id is not None:
+        doc["service_id"] = service_id
+
+    if timeslot is not None:
+        if timeslot <= datetime.datetime.today() - datetime.timedelta(1):
+            raise ErrInvalidParameters("can't schedule an appointment in the past")
+        # TODO: check for availability for the provided timeslot
+        doc["timeslot"] = timeslot
+
+    if name is not None:
+        doc["name"] = name
+
+    if email is not None:
+        doc["email"] = email
+
+    if vehicle is not None:
+        doc["vehicle"] = vehicle
+
+    if description is not None:
+        doc["description"] = description
+
+    appointments.update(doc, query.id == id)
     return id
 
 

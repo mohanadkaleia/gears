@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+{% set page_title='Appointments' %}
+
+{% block action_buttons %}
+  <button id="addAppointment" type="button" class="btn btn-primary">
+    Add New
+  </button>
+{% endblock %}
+
+{% block content %}
+  <div id='calendar'></div>
+  {% include 'admin/appointments/upsert_modal.html' %}
+{% endblock %}
+
+{% block js %}
+  <script src="/static/js/appointments.js"></script>
+  <script type="application/javascript">
+    appointment.data = JSON.parse(`{{ appointments|safe }}`);
+  </script>
+{% endblock %}

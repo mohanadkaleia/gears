@@ -45,3 +45,7 @@ def get_by_name(name):
         raise ErrNotFound(f"no data found for the provided name: {name}")
 
     return result[0]
+
+
+def all():
+    return shops.all()
