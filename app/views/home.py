@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from app.config import get_config
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, flash, redirect, url_for
 
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
+import app.models.shops as shops_model
 import app.models.services as services_model
-import app.models.appointments as appintments_model
+import app.models.appointments as appointment_model
 
 from app.third_parties import sendgrid
 
@@ -61,7 +64,7 @@ def send_email():
     from_email = request.form["from_email"]
     subject = request.form["subject"]
     content = request.form["content"]
-    config = get_config()
+    # config = get_config()  # This one seems already defined at the top
     try:
         sendgrid.send(from_email, config["TO_EMAIL_ADDRESS"], subject, content)
     except sendgrid.ErrSendEmail:
@@ -72,11 +75,45 @@ def send_email():
 
 @bp.route("/appointment")
 def appointment():
-    booked_appointments = appintments_model.get_booked_slots()
+    booked_appointments = appointment_model.get_booked_slots()
     timeslots = [a["timeslot"].date() for a in booked_appointments]
-    print(timeslots)
-    data = {"appointments": timeslots}
+    shops = shops_model.all() or []
+    services = services_model.all() or []
+    data = {
+        "shops": shops,
+        "services": services,
+        "appointments": timeslots
+    }
     return render_template("appointment.html", config=config, data=data)
+
+
+@bp.route("/appointment", methods=["POST"])
+def save_appointment():
+    appointment_model.insert(
+        shop_id=request.form.get("shop"),
+        service_id=request.form.get("service"),
+        timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
+        vehicle=request.form.get("vehicle"),
+        name=request.form.get("name"),
+        email=request.form.get("email"),
+        description=request.form.get("description")
+    )
+    # TODO: Send email to customer and admin
+    # I'm unable to test this since I don't have
+    sendgrid.send(
+        config["TO_EMAIL_ADDRESS"],
+        request.form.get("email"),
+        "Your appointment has been received",
+        "Your appointment has been received"
+    )
+    sendgrid.send(
+        config["TO_EMAIL_ADDRESS"],
+        config["TO_EMAIL_ADDRESS"],
+        "New appointment has been created",
+        "New appointment has been created"
+    )
+    flash("Appointment has been sent")
+    return redirect(url_for("home.appointment"))
 
 
 @bp.errorhandler(404)

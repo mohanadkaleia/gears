@@ -1,53 +1,82 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="row justify-content-md-center">
-  <form class="row g-3">
-    <div class="col-md-6">
-      <label for="name" class="form-label">Name</label>
-      <input type="text" class="form-control" id="name" />
-    </div>
-    <div class="col-md-6">
-      <label for="email" class="form-label">Email</label>
-      <input type="email" class="form-control" id="email" />
-    </div>
-    <div class="col-6">
-      <label for="vehicle" class="form-label">Your vehicle</label>
-      <input
-        type="text"
-        class="form-control"
-        id="vehicle"
-        placeholder="Make/Model/Year"
-      />
-    </div>
-    <div class="col-6">
-      <label for="datetime" class="form-label">Pick a date</label>
-      <input class="form-control" id="datetime" placeholder=""/>
-    </div>
-    <div class="col-md-12">
-      <label for="description" class="form-label">Description</label>
-      <textarea name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
-    </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Book an appointment</button>
-    </div>
-  </form>
-</div>
+  <div class="row justify-content-md-center">
+    <form class="row g-3" method="POST">
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" name="name"/>
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email"/>
+      </div>
+      <div class="col-6">
+        <label for="vehicle" class="form-label">Your vehicle</label>
+        <input
+          type="text"
+          class="form-control"
+          id="vehicle"
+          name="vehicle"
+          placeholder="Make/Model/Year"
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Shop</label>
+        <select id="shop" name="shop" class="form-control">
+          <option value="" selected hidden>
+            Select a shop...
+          </option>
+          {% for shop in data["shops"] %}
+            <option value="{{ shop.id }}"
+              {% if appt and appt["shop_id"] == shop.id %} selected {% endif %}>
+              {{ shop.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Service</label>
+        <select id="service" name="service" class="form-control">
+          <option value="" hidden>
+            Select a service...
+          </option>
+          {% for service in data["services"] %}
+            <option value="{{ service.id }}">
+              {{ service.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-6">
+        <label for="datetime" class="form-label">Pick a date</label>
+        <input class="form-control" id="datetime" name="timeslot" placeholder=""/>
+      </div>
+      <div class="col-md-12">
+        <label for="description" class="form-label">Description</label>
+        <textarea name="description" id="description" class="form-control" cols="30" rows="10"></textarea>
+      </div>
+      <div class="col-12">
 
-<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
-<script>
-  const picker = new Litepicker({
-    element: document.getElementById('datetime'),
-    lockDaysFilter: (day) => {
-      const d = day.getDay();
-      return [7, 0].includes(d);
-    },
-    minDate: new Date() - 1,
-    lockDays: [
-    {% for timeslot in data.appointments %}
-        "{{ timeslot }}",
-    {% endfor %}
-    ]
-  });
-</script>
+        <button type="submit" class="btn btn-primary">Book an appointment</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+  <script>
+    const picker = new Litepicker({
+      element: document.getElementById('datetime'),
+      lockDaysFilter: (day) => {
+        const d = day.getDay();
+        return [7, 0].includes(d);
+      },
+      minDate: new Date() - 1,
+      lockDays: [
+        {% for timeslot in data.appointments %}
+          "{{ timeslot }}",
+        {% endfor %}
+      ]
+    });
+  </script>
 
 {% endblock %}
