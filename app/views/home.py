@@ -77,12 +77,23 @@ def send_email():
 def appointment():
     booked_appointments = appointment_model.get_booked_slots()
     timeslots = [a["timeslot"].date() for a in booked_appointments]
+    locked_slots = {}
+    # locked_slots: Is for dynamic lock days on the calendar in the front-end
+    for a in booked_appointments:
+        service = services_model.get(a["service_id"])
+        if service["max_slot"]:
+            if service["id"] not in locked_slots:
+                locked_slots[service["id"]] = []
+            locked_slots[service["id"]].append(
+                str(a["timeslot"].date())
+            )
     shops = shops_model.all() or []
     services = services_model.all() or []
     data = {
         "shops": shops,
         "services": services,
-        "appointments": timeslots
+        "appointments": timeslots,
+        "locked_slots": locked_slots
     }
     return render_template("appointment.html", config=config, data=data)
 
@@ -90,7 +101,7 @@ def appointment():
 @bp.route("/appointment", methods=["POST"])
 def save_appointment():
     appointment_model.insert(
-        shop_id=request.form.get("shop"),
+        shop_id=None,
         service_id=request.form.get("service"),
         timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
         vehicle=request.form.get("vehicle"),
@@ -98,21 +109,18 @@ def save_appointment():
         email=request.form.get("email"),
         description=request.form.get("description")
     )
-    # TODO: Send email to customer and admin
-    # I'm unable to test this since I don't have
-    sendgrid.send(
-        config["TO_EMAIL_ADDRESS"],
-        request.form.get("email"),
-        "Your appointment has been received",
-        "Your appointment has been received"
-    )
-    sendgrid.send(
-        config["TO_EMAIL_ADDRESS"],
-        config["TO_EMAIL_ADDRESS"],
-        "New appointment has been created",
-        "New appointment has been created"
-    )
-    flash("Appointment has been sent")
+    # sendgrid.send(
+    #     config["TO_EMAIL_ADDRESS"],
+    #     request.form.get("email"),
+    #     "Your appointment has been received",
+    #     "Your appointment has been received"
+    # )
+    # sendgrid.send(
+    #     config["TO_EMAIL_ADDRESS"],
+    #     config["TO_EMAIL_ADDRESS"],
+    #     "New appointment has been created",
+    #     "New appointment has been created"
+    # )
     return redirect(url_for("home.appointment"))
 
 

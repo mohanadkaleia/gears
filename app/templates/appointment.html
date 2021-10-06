@@ -21,23 +21,9 @@
         />
       </div>
       <div class="col-md-6">
-        <label class="form-label">Shop</label>
-        <select id="shop" name="shop" class="form-control">
-          <option value="" selected hidden>
-            Select a shop...
-          </option>
-          {% for shop in data["shops"] %}
-            <option value="{{ shop.id }}"
-              {% if appt and appt["shop_id"] == shop.id %} selected {% endif %}>
-              {{ shop.name }}
-            </option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-6">
         <label class="form-label">Service</label>
         <select id="service" name="service" class="form-control">
-          <option value="" hidden>
+          <option value="" hidden selected>
             Select a service...
           </option>
           {% for service in data["services"] %}
@@ -71,11 +57,18 @@
         return [7, 0].includes(d);
       },
       minDate: new Date() - 1,
-      lockDays: [
-        {% for timeslot in data.appointments %}
-          "{{ timeslot }}",
-        {% endfor %}
-      ]
+      lockDays: []
+    });
+
+    const lockedSlots = {{ data.locked_slots|safe }}; // This is for lock days on calendar
+    // It depends on the service. Some services are un-limited but others has time slots limnited
+    const serviceSelector = document.getElementById("service");
+    serviceSelector.addEventListener("change", (e) => {
+      // 1. Clear current value
+      picker.clearSelection();
+      // 2. Lock days according to the selected service
+      picker.setLockDays(lockedSlots[e.target.value] || []);
+      console.log(lockedSlots[e.target.value] || []);
     });
   </script>
 

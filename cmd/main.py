@@ -56,6 +56,7 @@ def create_services(shop_id=None):
                 and surface polishing.
                 Detail rate is $40 an hour with average 3 hours detail.
                 Number of hours needed to fully detail a car depends on the car situation itself.""",
+            "max_slot": 1
         },
         {
             "name": "Lube, Oil, and Filters",
@@ -107,6 +108,7 @@ def create_services(shop_id=None):
                 description=service["description"],
                 prices=service["price"],
                 images=service["images"],
+                max_slot=service.get('max_slot')
             )
             services_ids.append(id)
             print(f"Service {service['name']} has been added")
