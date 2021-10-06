@@ -109,18 +109,18 @@ def save_appointment():
         email=request.form.get("email"),
         description=request.form.get("description")
     )
-    # sendgrid.send(
-    #     config["TO_EMAIL_ADDRESS"],
-    #     request.form.get("email"),
-    #     "Your appointment has been received",
-    #     "Your appointment has been received"
-    # )
-    # sendgrid.send(
-    #     config["TO_EMAIL_ADDRESS"],
-    #     config["TO_EMAIL_ADDRESS"],
-    #     "New appointment has been created",
-    #     "New appointment has been created"
-    # )
+    sendgrid.send(
+        config["TO_EMAIL_ADDRESS"],
+        request.form.get("email"),
+        "Your appointment has been received",
+        "Your appointment has been received"
+    )
+    sendgrid.send(
+        config["TO_EMAIL_ADDRESS"],
+        config["TO_EMAIL_ADDRESS"],
+        "New appointment has been created",
+        "New appointment has been created"
+    )
     return redirect(url_for("home.appointment"))
 
 
