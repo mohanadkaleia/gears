@@ -64,7 +64,6 @@ def send_email():
     from_email = request.form["from_email"]
     subject = request.form["subject"]
     content = request.form["content"]
-    # config = get_config()  # This one seems already defined at the top
     try:
         sendgrid.send(from_email, config["TO_EMAIL_ADDRESS"], subject, content)
     except sendgrid.ErrSendEmail:
@@ -108,12 +107,6 @@ def save_appointment():
         name=request.form.get("name"),
         email=request.form.get("email"),
         description=request.form.get("description")
-    )
-    sendgrid.send(
-        config["TO_EMAIL_ADDRESS"],
-        request.form.get("email"),
-        "Your appointment has been received",
-        "Your appointment has been received"
     )
     sendgrid.send(
         config["TO_EMAIL_ADDRESS"],
