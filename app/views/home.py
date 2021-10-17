@@ -1,10 +1,14 @@
+from datetime import datetime
+from os import times
+
 from app.config import get_config
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, flash, redirect, url_for
 
 import app.models.vehicles as vehicles_model
 import app.models.promos as promos_model
+import app.models.shops as shops_model
 import app.models.services as services_model
-import app.models.appointments as appintments_model
+import app.models.appointments as appointment_model
 
 from app.third_parties import sendgrid
 
@@ -61,7 +65,6 @@ def send_email():
     from_email = request.form["from_email"]
     subject = request.form["subject"]
     content = request.form["content"]
-    config = get_config()
     try:
         sendgrid.send(from_email, config["TO_EMAIL_ADDRESS"], subject, content)
     except sendgrid.ErrSendEmail:
@@ -72,11 +75,56 @@ def send_email():
 
 @bp.route("/appointment")
 def appointment():
-    booked_appointments = appintments_model.get_booked_slots()
+    booked_appointments = appointment_model.get_booked_slots()
     timeslots = [a["timeslot"].date() for a in booked_appointments]
-    print(timeslots)
-    data = {"appointments": timeslots}
+    locked_slots = {}
+    # locked_slots: Is for dynamic lock days on the calendar in the front-end
+    for a in booked_appointments:
+        service = services_model.get(a["service_id"])
+        if service["max_slot"]:
+            if service["id"] not in locked_slots:
+                locked_slots[service["id"]] = []
+            locked_slots[service["id"]].append(
+                str(a["timeslot"].date())
+            )
+    shops = shops_model.all() or []
+    services = services_model.all() or []
+    data = {
+        "shops": shops,
+        "services": services,
+        "appointments": timeslots,
+        "locked_slots": locked_slots
+    }
     return render_template("appointment.html", config=config, data=data)
+
+
+@bp.route("/appointment", methods=["POST"])
+def save_appointment():
+    timeslot = datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d")
+    new_id = appointment_model.insert(
+        shop_id=None,
+        service_id=request.form.get("service"),
+        timeslot=timeslot,
+        vehicle=request.form.get("vehicle"),
+        name=request.form.get("name"),
+        email=request.form.get("email"),
+        description=request.form.get("description")
+    )
+    if new_id:
+        text_body = f"""New appointment has been created
+                    - Name: {request.form.get("name")}
+                    - Email: {request.form.get("email")}
+                    - Service: {services_model.get(request.form.get("service"))["name"]}
+                    - Timeslot: {timeslot}
+                    - Vehicle: {request.form.get("vehicle")}
+                    - Description: {request.form.get("description")}"""
+        sendgrid.send(
+            config["TO_EMAIL_ADDRESS"],
+            config["TO_EMAIL_ADDRESS"],
+            "New appointment has been created",
+            text_body
+        )
+    return redirect(url_for("home.appointment"))
 
 
 @bp.errorhandler(404)

@@ -13,7 +13,7 @@ class ErrInvalidParameters(Exception):
     pass
 
 
-def insert(shop_id="", name="", description="", prices="", images=None):
+def insert(shop_id="", name="", description="", prices="", images=None, max_slot=None):
     # Initialize id with randomly generated string
     id = util.random_id(initial="s")
 
@@ -26,6 +26,7 @@ def insert(shop_id="", name="", description="", prices="", images=None):
             "description": description,
             "prices": prices,
             "images": images or [],
+            "max_slot": max_slot
         }
     )
     return id
