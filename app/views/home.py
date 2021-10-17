@@ -1,4 +1,5 @@
 from datetime import datetime
+from os import times
 
 from app.config import get_config
 from flask import render_template, request, Blueprint, flash, redirect, url_for
@@ -99,21 +100,30 @@ def appointment():
 
 @bp.route("/appointment", methods=["POST"])
 def save_appointment():
-    appointment_model.insert(
+    timeslot = datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d")
+    new_id = appointment_model.insert(
         shop_id=None,
         service_id=request.form.get("service"),
-        timeslot=datetime.strptime(request.form.get("timeslot"), "%Y-%m-%d"),
+        timeslot=timeslot,
         vehicle=request.form.get("vehicle"),
         name=request.form.get("name"),
         email=request.form.get("email"),
         description=request.form.get("description")
     )
-    sendgrid.send(
-        config["TO_EMAIL_ADDRESS"],
-        config["TO_EMAIL_ADDRESS"],
-        "New appointment has been created",
-        "New appointment has been created"
-    )
+    if new_id:
+        text_body = f"""New appointment has been created
+                    - Name: {request.form.get("name")}
+                    - Email: {request.form.get("email")}
+                    - Service: {services_model.get(request.form.get("service"))["name"]}
+                    - Timeslot: {timeslot}
+                    - Vehicle: {request.form.get("vehicle")}
+                    - Description: {request.form.get("description")}"""
+        sendgrid.send(
+            config["TO_EMAIL_ADDRESS"],
+            config["TO_EMAIL_ADDRESS"],
+            "New appointment has been created",
+            text_body
+        )
     return redirect(url_for("home.appointment"))
 
 
