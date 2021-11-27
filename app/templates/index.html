@@ -17,7 +17,7 @@
 {% block content %}
   <div class="row">
     {% for service in content['services'] %}
-      <div class="col-md-4 col-sm-12 col-12">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-12">
         <div class="card mb-4 shadow bg-white rounded">
           <img src="/static/images/{{ service.images[0] }}" class="card-img-top" alt="{{ service.name }}" height="225" width="100%">
 
@@ -51,7 +51,7 @@
 
   <div class="row">
     {% for vehicle in content['vehicles'][:6] %}
-      <div class="col-md-4 col-sm-12 col-12">
+      <div class="col-lg-4 col-md-12 col-sm-12 col-12">
         <div class="card mb-4 shadow bg-white rounded">
           <img src="/static/images/{{ vehicle.images[0] }}" class="card-img-top" alt="{{ vehicle.id }}" height="225" width="100%">
 
