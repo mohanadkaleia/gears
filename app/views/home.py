@@ -62,10 +62,13 @@ def login():
 @bp.route("/send_email", methods=["POST"])
 def send_email():
     from_email = request.form["from_email"]
+    to_address = config["TO_EMAIL_ADDRESS"]
+    bcc_address = config["BCC_EMAIL_ADDRESS"]
     subject = request.form["subject"]
     content = request.form["content"]
+
     try:
-        sendgrid.send(from_email, config["TO_EMAIL_ADDRESS"], subject, content)
+        sendgrid.send(from_email, to_address, bcc_address, subject, content)
     except sendgrid.ErrSendEmail:
         return "oops, my bird just chewed the cable and we can't send your email now 😢.. please try again later "
 
@@ -80,7 +83,7 @@ def appointment():
     # locked_slots: Is for dynamic lock days on the calendar in the front-end
     for a in booked_appointments:
         service = services_model.get(a["service_id"])
-        if service["max_slot"]:
+        if "max_slot" in service:
             if service["id"] not in locked_slots:
                 locked_slots[service["id"]] = []
             locked_slots[service["id"]].append(str(a["timeslot"].date()))

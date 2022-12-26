@@ -11,6 +11,7 @@ dev = {
     "SITENAME": "DKLube & Detail",
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
     "TO_EMAIL_ADDRESS": "ms.kaleia@gmail.com",
+    "BCC_ENAIL_ADDRESS": "ms.kaleia@gmail.com",
 }
 
 # Production env variables
@@ -19,6 +20,7 @@ prod = {
     "SITENAME": "DKLube & Detail",
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
     "TO_EMAIL_ADDRESS": "dklube63@gmail.com",
+    "BCC_ENAIL_ADDRESS": "ms.kaleia@gmail.com",
 }
 
 

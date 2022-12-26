@@ -10,9 +10,11 @@ _configs = get_config()
 _sg = sendgrid.SendGridAPIClient(api_key=_configs["SENDGRID_API_KEY"])
 
 
-def send(from_, to_, subject, body):
+def send(from_, to_, bcc, subject, body):
     data = {
-        "personalizations": [{"to": [{"email": to_}], "subject": subject}],
+        "personalizations": [
+            {"to": [{"email": to_}], "subject": subject, "bcc": [{"email": bcc}]}
+        ],
         "from": {"email": from_},
         "content": [{"type": "text/plain", "value": body}],
     }
