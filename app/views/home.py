@@ -124,6 +124,7 @@ def save_appointment():
         sendgrid.send(
             config["TO_EMAIL_ADDRESS"],
             config["TO_EMAIL_ADDRESS"],
+            config["BCC_EMAIL_ADDRESS"],
             "New appointment has been created",
             text_body,
         )
