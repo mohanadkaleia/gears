@@ -56,7 +56,7 @@
           <img src="/static/images/{{ vehicle.images[0] }}" class="card-img-top" alt="{{ vehicle.id }}" height="225" width="100%">
 
           <div class="card-body">
-            <h1><a href="/inventory/{{ vehicle.id }}">{{vehicle.id}}</a></h1>
+            <h1><a href="/inventory/{{ vehicle.id }}">{{vehicle.make}} {{vehicle.model}}</a></h1>
             <p class="card-text">
               {{ vehicle.description|truncate(255, True) }}
             </p>
